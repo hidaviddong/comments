@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+  bdcs-datascreen:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my_app
+    ports:
+      - 8011:80
