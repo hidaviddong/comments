@@ -1,15 +1,5 @@
-import { Route, Routes } from 'react-router-dom'
-
-import About from '@/components/About'
-import Home from '@/components/Home'
+import { Button } from './components/ui/button'
 
 export default function App() {
-  return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/about" element={<About />}></Route>
-      </Routes>
-    </div>
-  )
+  return <Button className="fixed bottom-0 left-1/2 -translate-x-1/2 transform">开启评论</Button>
 }
