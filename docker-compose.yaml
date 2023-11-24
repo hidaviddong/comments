@@ -4,6 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: my_app
+    container_name: comments
     ports:
       - 8011:80
