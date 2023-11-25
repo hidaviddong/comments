@@ -12,8 +12,12 @@ export function useMouseHover() {
         if (event.target === commentsRoot) {
           return
         }
+
         event.target.dataset.originalBorder = event.target.style.border
         event.target.style.border = '1px solid red'
+
+        const rect = event.target.getBoundingClientRect()
+        console.log(rect.right + window.scrollX)
       }
     }
     const handleMouseOut = (event: MouseEvent) => {
