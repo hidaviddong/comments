@@ -1,10 +1,10 @@
-import Bubble from './components/bubble'
 import FooterMenu from './components/footer-menu'
+import TooltipPopover from './components/tooltip-popover'
 
 export default function App() {
   return (
     <>
-      <Bubble />
+      <TooltipPopover />
       <FooterMenu />
     </>
   )
