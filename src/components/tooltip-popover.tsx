@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { isOpenAtom } from '@/store'
+import type { PositionProps } from '@/types'
 const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`)
 type Checked = DropdownMenuCheckboxItemProps['checked']
 
@@ -28,9 +29,11 @@ export function DialogList() {
   )
 }
 
-function BubbleCard() {
+function BubbleCard({ x, y }: PositionProps) {
   return (
-    <div className="absolute left-[200px] top-[270px] h-52 w-72 space-y-2 rounded-md border p-2 shadow">
+    <div
+      className="absolute h-52 w-72 space-y-2 rounded-md border p-2 shadow"
+      style={{ left: `${x}px`, top: `${y}px` }}>
       <DialogList />
       <div className="mt-1 flex w-full max-w-sm items-center space-x-2">
         <Input type="text" placeholder="Write the comment..." className="w-3/4" />
@@ -41,18 +44,18 @@ function BubbleCard() {
     </div>
   )
 }
-function Bubble() {
-  const [showStatusBar, setShowStatusBar] = useState<Checked>(true)
+function Bubble({ x, y }: PositionProps) {
+  const [showBubbleCard, setShowBubbleCard] = useState<Checked>(true)
   return (
     <>
-      <Button variant="outline" size="icon" className="absolute left-[200px] top-[240px] h-6 w-6">
-        <ChevronDownIcon className="h-4 w-4" onClick={() => setShowStatusBar(!showStatusBar)} />
+      <Button variant="outline" size="icon" className="absolute h-6 w-6" style={{ left: `${x}px`, top: `${y}px` }}>
+        <ChevronDownIcon className="h-4 w-4" onClick={() => setShowBubbleCard(!showBubbleCard)} />
       </Button>
-      {!showStatusBar && <BubbleCard />}
+      {!showBubbleCard && <BubbleCard x={x} y={y + 30} />}
     </>
   )
 }
-export default function TooltipPopover() {
+export default function TooltipPopover({ x, y }: PositionProps) {
   const isOpen = useAtomValue(isOpenAtom)
-  return <>{isOpen && <Bubble />}</>
+  return <>{isOpen && <Bubble x={x} y={y} />}</>
 }
