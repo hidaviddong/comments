@@ -64,5 +64,5 @@ export function useMouseHover() {
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [isOpen])
+  }, [isOpen, setTooltips])
 }
