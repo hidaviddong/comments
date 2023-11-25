@@ -23,6 +23,9 @@ dependencies:
   jotai:
     specifier: ^2.4.3
     version: 2.4.3(@types/react@18.2.15)(react@18.2.0)
+  jotai-effect:
+    specifier: ^0.2.3
+    version: 0.2.3(jotai@2.4.3)
   lucide-react:
     specifier: ^0.288.0
     version: 0.288.0(react@18.2.0)
@@ -1559,6 +1562,14 @@ packages:
   /jiti@1.20.0:
     resolution: {integrity: sha512-3TV69ZbrvV6U5DfQimop50jE9Dl6J8O1ja1dvBbMba/sZ3YBEQqJ2VZRoQPVnhlzjNtU1vaXRZVrVjU4qtm8yA==}
     hasBin: true
+
+  /jotai-effect@0.2.3(jotai@2.4.3):
+    resolution: {integrity: sha512-Ecs40W4Y+SI1EqbvPdoLDvbyic5eMyD5ifJIQrrr+hWz1GEjmijVWyKw6TzmYzO2+++CkYPF+fYsWzsWsR0AAQ==}
+    peerDependencies:
+      jotai: '>=2.4.3'
+    dependencies:
+      jotai: 2.4.3(@types/react@18.2.15)(react@18.2.0)
+    dev: false
 
   /jotai@2.4.3(@types/react@18.2.15)(react@18.2.0):
     resolution: {integrity: sha512-CSAHX9LqWG5WCrU8OgBoZbBJ+Bo9rQU0mPusEF4e0CZ/SNFgurG26vb3UpgvCSJZgYVcUQNiUBM5q86PA8rstQ==}

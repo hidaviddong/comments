@@ -1,3 +1,4 @@
 import { atom } from 'jotai'
 
-export const counterAtom = atom(0)
+export const isOpenAtom = atom(false)
+export const buttonTextAtom = atom((get) => (get(isOpenAtom) ? 'Close' : 'Open'))

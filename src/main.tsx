@@ -29,15 +29,13 @@ function createComment(dom: HTMLElement) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 找到或创建一个div元素来挂载评论组件
-  const commentDivId = 'comments-root' // 设定或获取div的ID
+  const commentDivId = 'comments-root'
   let commentDiv = document.getElementById(commentDivId)
 
-  // 如果找不到该元素，就创建一个新的div并添加到文档中
   if (!commentDiv) {
     commentDiv = document.createElement('div')
     commentDiv.id = commentDivId
-    document.body.appendChild(commentDiv) // 或者添加到页面的其他特定位置
+    document.body.appendChild(commentDiv)
   }
 
   createComment(commentDiv)
