@@ -1,25 +1,34 @@
 import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
+import { getFakeData } from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { isOpenAtom } from '@/store'
 import type { PositionProps } from '@/types'
-const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`)
 type Checked = DropdownMenuCheckboxItemProps['checked']
 
 export function DialogList() {
+  const { data, isPending, isError, error } = useQuery({ queryKey: ['list'], queryFn: getFakeData })
+  if (isPending) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
   return (
     <ScrollArea className="h-36 w-full overflow-auto ">
       <div className="p-4">
-        {tags.map((tag) => (
+        {data.map((tag) => (
           <>
-            <div key={tag} className="text-sm">
-              {tag}
+            <div key={tag.id} className="text-sm">
+              {tag.title}
             </div>
             <Separator className="my-2" />
           </>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export async function getReportData() {
-  const response = await axios.get('https://api.github.com/repos/TanStack/query')
+export async function getFakeData() {
+  const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
   return response.data
 }

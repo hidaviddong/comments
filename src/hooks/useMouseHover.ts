@@ -26,10 +26,9 @@ export function useMouseHover() {
         targetElement.style.border = '1px solid red'
 
         const rect = targetElement.getBoundingClientRect()
-        const x = rect.left + rect.width // 右边界坐标
-        const y = rect.top + rect.height // 下边界坐标
+        const x = rect.left + rect.width - 10 // 右边界坐标
+        const y = rect.top + rect.height - 10 // 下边界坐标
         const id = `comment-${x}-${y}`
-        // 但是这里的useId 总是相同的
         setTooltips((prevTooltips) => {
           // 检查数组中是否已经有这个 ID 的元素
           const alreadyExists = prevTooltips.some((tooltip) => tooltip.id === id)
@@ -43,15 +42,6 @@ export function useMouseHover() {
     const handleMouseOut = (event: MouseEvent) => {
       if (event.target instanceof HTMLElement) {
         event.target.style.border = event.target.dataset.originalBorder || ''
-
-        // 获取元素的唯一标识符
-        // const rect = event.target.getBoundingClientRect()
-        // const x = rect.left + rect.width // 右边界坐标
-        // const y = rect.top + rect.height // 下边界坐标
-        // const idToRemove = `comment-${x}-${y}`
-
-        // 更新 tooltips 数组，移除对应的元素
-        // setTooltips((prevTooltips) => prevTooltips.filter((tooltip) => tooltip.id !== idToRemove))
       }
     }
 
