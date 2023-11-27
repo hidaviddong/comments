@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
-import { getFakeData } from '@/api'
+import { getComments } from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -14,7 +14,7 @@ import type { PositionProps } from '@/types'
 type Checked = DropdownMenuCheckboxItemProps['checked']
 
 export function DialogList() {
-  const { data, isPending, isError, error } = useQuery({ queryKey: ['list'], queryFn: getFakeData })
+  const { data: comments, isPending, isError, error } = useQuery({ queryKey: ['comments'], queryFn: getComments })
   if (isPending) {
     return <span>Loading...</span>
   }
@@ -25,10 +25,10 @@ export function DialogList() {
   return (
     <ScrollArea className="h-36 w-full overflow-auto ">
       <div className="p-4">
-        {data.map((tag) => (
+        {comments.data.map((comment) => (
           <>
-            <div key={tag.id} className="text-sm">
-              {tag.title}
+            <div key={comment.id} className="text-sm">
+              {comment.comment}
             </div>
             <Separator className="my-2" />
           </>
