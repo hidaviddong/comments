@@ -1,9 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
+import type { TooltipsResponse } from '@/api'
 import { isOpenAtom, tooltipsAtom } from '@/store'
 
 export function useMouseHover() {
+  const queryClient = useQueryClient()
   const isOpen = useAtomValue(isOpenAtom)
   const setTooltips = useSetAtom(tooltipsAtom)
   useEffect(() => {
@@ -29,13 +32,22 @@ export function useMouseHover() {
         const x = rect.left + rect.width - 10 // 右边界坐标
         const y = rect.top + rect.height - 10 // 下边界坐标
         const id = `comment-${x}-${y}`
-        setTooltips((prevTooltips) => {
-          // 检查数组中是否已经有这个 ID 的元素
-          const alreadyExists = prevTooltips.some((tooltip) => tooltip.id === id)
-          if (alreadyExists) {
-            return prevTooltips
+        // 合并数据并更新缓存
+        queryClient.setQueryData<TooltipsResponse>(['tooltips'], (oldData) => {
+          // 确保 oldData 不是 null 或 undefined
+          const existingData = oldData?.data || []
+          // 合并逻辑，排除重复项
+          const updatedData = [
+            ...existingData,
+            {
+              id,
+              x,
+              y
+            }
+          ]
+          return {
+            data: updatedData.filter((tooltip, index, self) => index === self.findIndex((t) => t.id === tooltip.id))
           }
-          return [...prevTooltips, { id, x, y }]
         })
       }
     }
@@ -48,11 +60,14 @@ export function useMouseHover() {
     if (isOpen) {
       document.addEventListener('mouseover', handleMouseOver)
       document.addEventListener('mouseout', handleMouseOut)
+    } else {
+      queryClient.invalidateQueries({
+        queryKey: ['tooltips']
+      })
     }
-
     return () => {
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [isOpen, setTooltips])
+  }, [isOpen, setTooltips, queryClient])
 }
