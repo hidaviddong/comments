@@ -10,7 +10,8 @@ import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { isOpenAtom } from '@/store'
-import type { PositionProps } from '@/types'
+
+import { TooltipsProps } from '../types'
 type Checked = DropdownMenuCheckboxItemProps['checked']
 
 export function DialogList() {
@@ -25,10 +26,10 @@ export function DialogList() {
   return (
     <ScrollArea className="h-36 w-full overflow-auto ">
       <div className="p-4">
-        {comments.data?.map((comment) => (
+        {comments?.map((comment) => (
           <>
-            <div key={comment.id} className="text-sm">
-              {comment.content}
+            <div key={comment.comment_id} className="text-sm">
+              {comment.comment_content}
             </div>
             <Separator className="my-2" />
           </>
@@ -38,7 +39,7 @@ export function DialogList() {
   )
 }
 
-function BubbleCard({ x, y }: PositionProps) {
+function BubbleCard({ x, y }: TooltipsProps) {
   return (
     <div
       className="absolute h-52 w-72 space-y-2 rounded-md border p-2 shadow"
@@ -53,18 +54,18 @@ function BubbleCard({ x, y }: PositionProps) {
     </div>
   )
 }
-function Bubble({ x, y }: PositionProps) {
+function Bubble({ x, y }: TooltipsProps) {
   const [showBubbleCard, setShowBubbleCard] = useState<Checked>(true)
   return (
     <>
       <Button variant="outline" size="icon" className="absolute h-6 w-6" style={{ left: `${x}px`, top: `${y}px` }}>
         <ChevronDownIcon className="h-4 w-4" onClick={() => setShowBubbleCard(!showBubbleCard)} />
       </Button>
-      {!showBubbleCard && <BubbleCard x={x} y={y + 30} />}
+      {x && y && !showBubbleCard && <BubbleCard x={x} y={y + 30} />}
     </>
   )
 }
-export default function TooltipPopover({ x, y }: PositionProps) {
+export default function TooltipPopover({ x, y }: TooltipsProps) {
   const isOpen = useAtomValue(isOpenAtom)
   return <>{isOpen && <Bubble x={x} y={y} />}</>
 }

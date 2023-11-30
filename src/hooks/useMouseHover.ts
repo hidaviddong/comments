@@ -2,10 +2,12 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import type { TooltipsResponse } from '@/api'
-import { isOpenAtom, tooltipsAtom } from '@/store'
+import { isOpenAtom, sessionAtom, tooltipsAtom } from '@/store'
+import { TooltipsType } from '@/types'
+import { getRandomInteger } from '@/utils'
 
 export function useMouseHover() {
+  const session = useAtomValue(sessionAtom)
   const queryClient = useQueryClient()
   const isOpen = useAtomValue(isOpenAtom)
   const setTooltips = useSetAtom(tooltipsAtom)
@@ -31,25 +33,22 @@ export function useMouseHover() {
         const rect = targetElement.getBoundingClientRect()
         const x = rect.left + rect.width - 10 // 右边界坐标
         const y = rect.top + rect.height - 10 // 下边界坐标
-        const id = `comment-${x}-${y}`
+        const tooltip_id = getRandomInteger(0, 9)
         // 合并数据并更新缓存
-        queryClient.setQueryData<TooltipsResponse>(['tooltips'], (oldData) => {
+        queryClient.setQueryData<TooltipsType[]>(['tooltips'], (oldData) => {
           // 确保 oldData 不是 null 或 undefined
-          const existingData = oldData?.data || []
+          const existingData = oldData || []
           // 合并逻辑，排除重复项
-          const updatedData = [
+          return [
             ...existingData,
             {
-              id,
+              project_id: 1,
+              route_id: 1,
+              tooltip_id,
               x,
               y
             }
           ]
-          return {
-            code: 200,
-            message: 'ok',
-            data: updatedData.filter((tooltip, index, self) => index === self.findIndex((t) => t.id === tooltip.id))
-          }
         })
       }
     }
@@ -67,9 +66,13 @@ export function useMouseHover() {
         queryKey: ['tooltips']
       })
     }
+    if (!session) {
+      document.removeEventListener('mouseover', handleMouseOver)
+      document.removeEventListener('mouseout', handleMouseOut)
+    }
     return () => {
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [isOpen, setTooltips, queryClient])
+  }, [isOpen, setTooltips, queryClient, session])
 }

@@ -1,9 +1,9 @@
 import { atom } from 'jotai'
 
-import type { Position } from '@/types'
-type AuthEnum = 'login' | 'register'
+import type { AuthType, TooltipsType } from '@/types'
+
 export const isOpenAtom = atom(false)
-export const tooltipsAtom = atom<Position[]>([])
+export const tooltipsAtom = atom<TooltipsType[]>([])
 export const buttonTextAtom = atom((get) => (get(isOpenAtom) ? 'Close' : 'Open'))
 export const sessionAtom = atom<unknown>(null)
-export const authAtom = atom<AuthEnum>('login')
+export const authAtom = atom<AuthType>('login')

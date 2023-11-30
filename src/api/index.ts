@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { supabase } from '../supabaseClient'
 export interface Tooltip {
   id: string
   x: number
@@ -24,11 +24,11 @@ interface CommentResponse {
 }
 
 export async function getTooltips() {
-  const response = await axios.get<TooltipsResponse>('http://localhost:3000/api/tooltips')
-  return response.data
+  const { data } = await supabase.from('tooltips').select('*')
+  return data
 }
 
 export async function getComments() {
-  const response = await axios.get<CommentResponse>('http://localhost:3000/api/comments')
-  return response.data
+  const { data } = await supabase.from('comments').select('*')
+  return data
 }
