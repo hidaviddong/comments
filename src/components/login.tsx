@@ -31,6 +31,7 @@ export default function Login() {
       email: formData.email,
       password: formData.password
     })
+    console.log(data.user)
     if (data.user) {
       toast({
         title: 'Login Success!'

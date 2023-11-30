@@ -2,12 +2,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { isOpenAtom, sessionAtom, tooltipsAtom } from '@/store'
+import { isOpenAtom, tooltipsAtom } from '@/store'
 import { TooltipsType } from '@/types'
 import { getRandomInteger } from '@/utils'
 
 export function useMouseHover() {
-  const session = useAtomValue(sessionAtom)
   const queryClient = useQueryClient()
   const isOpen = useAtomValue(isOpenAtom)
   const setTooltips = useSetAtom(tooltipsAtom)
@@ -66,13 +65,9 @@ export function useMouseHover() {
         queryKey: ['tooltips']
       })
     }
-    if (!session) {
-      document.removeEventListener('mouseover', handleMouseOver)
-      document.removeEventListener('mouseout', handleMouseOut)
-    }
     return () => {
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [isOpen, setTooltips, queryClient, session])
+  }, [isOpen, setTooltips, queryClient])
 }

@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import Page from './page'
 import { sessionAtom } from './store'
 import { supabase } from './supabaseClient'
-
 export default function App() {
   const [session, setSession] = useAtom(sessionAtom)
   useEffect(() => {

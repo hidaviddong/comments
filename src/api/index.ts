@@ -1,26 +1,17 @@
 import { supabase } from '../supabaseClient'
-export interface Tooltip {
-  id: string
-  x: number
-  y: number
-}
-export interface TooltipsResponse {
-  code: number
-  message: string
-  data: Tooltip[] | null
-}
 
-interface Comment {
-  id: string
-  content: string
-  isResolved: boolean
-  user: string
-}
-
-interface CommentResponse {
-  tooltipId: number
-  message: string
-  data: Comment[] | null
+export async function getProjects(profile_id: string) {
+  const { data } = await supabase
+    .from('projects')
+    .select(
+      `
+    project_id,
+    project_name,
+    profiles(profile_id,profile_name)
+  `
+    )
+    .eq('profile_id', profile_id)
+  return data
 }
 
 export async function getTooltips() {
