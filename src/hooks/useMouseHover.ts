@@ -46,6 +46,8 @@ export function useMouseHover() {
             }
           ]
           return {
+            code: 200,
+            message: 'ok',
             data: updatedData.filter((tooltip, index, self) => index === self.findIndex((t) => t.id === tooltip.id))
           }
         })

@@ -1,22 +1,25 @@
-import { useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
+import { useEffect } from 'react'
 
-import { getTooltips } from './api'
-import FooterMenu from './components/footer-menu'
-import TooltipPopover from './components/tooltip-popover'
+import Page from './page'
+import { sessionAtom } from './store'
+import { supabase } from './supabaseClient'
 
 export default function App() {
-  const { data: tooltips, isPending, isError, error } = useQuery({ queryKey: ['tooltips'], queryFn: getTooltips })
-  if (isPending) {
-    return <div>......</div>
-  }
-  if (isError) {
-    return <span>{error.message}</span>
-  }
+  const [session, setSession] = useAtom(sessionAtom)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
 
-  return (
-    <>
-      {tooltips.data?.map((tooltip) => <TooltipPopover x={tooltip.x} y={tooltip.y} key={tooltip.id} />)}
-      <FooterMenu />
-    </>
-  )
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [session, setSession])
+
+  return <Page />
 }

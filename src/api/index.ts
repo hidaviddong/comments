@@ -1,5 +1,5 @@
 import axios from 'axios'
-interface Tooltip {
+export interface Tooltip {
   id: string
   x: number
   y: number
