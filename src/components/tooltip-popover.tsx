@@ -25,10 +25,10 @@ export function DialogList() {
   return (
     <ScrollArea className="h-36 w-full overflow-auto ">
       <div className="p-4">
-        {comments.data.map((comment) => (
+        {comments.data?.map((comment) => (
           <>
             <div key={comment.id} className="text-sm">
-              {comment.comment}
+              {comment.content}
             </div>
             <Separator className="my-2" />
           </>

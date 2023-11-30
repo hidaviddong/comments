@@ -15,7 +15,7 @@ export default function App() {
 
   return (
     <>
-      {tooltips?.data.map((tooltip) => <TooltipPopover x={tooltip.x} y={tooltip.y} key={tooltip.id} />)}
+      {tooltips.data?.map((tooltip) => <TooltipPopover x={tooltip.x} y={tooltip.y} key={tooltip.id} />)}
       <FooterMenu />
     </>
   )

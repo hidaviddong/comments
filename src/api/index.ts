@@ -5,17 +5,22 @@ interface Tooltip {
   y: number
 }
 export interface TooltipsResponse {
-  data: Tooltip[]
+  code: number
+  message: string
+  data: Tooltip[] | null
 }
 
 interface Comment {
   id: string
+  content: string
+  isResolved: boolean
   user: string
-  comment: string
 }
 
 interface CommentResponse {
-  data: Comment[]
+  tooltipId: number
+  message: string
+  data: Comment[] | null
 }
 
 export async function getTooltips() {
