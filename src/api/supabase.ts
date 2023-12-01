@@ -8,6 +8,9 @@ export class SupabaseAdapter implements APIAdapter {
       password
     })
   }
+  async logout() {
+    return await supabase.auth.signOut()
+  }
   async getTooltips() {
     const { data } = await supabase.from('tooltips').select('*')
     return data

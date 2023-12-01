@@ -4,7 +4,6 @@ import { useAtom, useAtomValue } from 'jotai'
 import { commentsService } from '@/api'
 import { buttonTextAtom, isOpenAtom, sessionAtom } from '@/store'
 
-import { supabase } from '../supabaseClient'
 import Auth from './auth'
 import { Button } from './ui/button'
 import { useToast } from './ui/use-toast'
@@ -20,7 +19,7 @@ export default function FooterMenu() {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
   const buttonText = useAtomValue(buttonTextAtom)
   async function handleLogoutClick() {
-    const { error } = await supabase.auth.signOut()
+    const { error } = await commentsService.logout()
     if (error) {
       toast({
         variant: 'destructive',

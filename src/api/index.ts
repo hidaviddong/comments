@@ -17,6 +17,9 @@ class CommentsAdapter implements APIAdapter {
   async login(email: string, password: string): Promise<AuthTokenResponse> {
     return this.adapter.login(email, password)
   }
+  async logout() {
+    return this.adapter.logout()
+  }
   async getTooltips(): Promise<TooltipsType> {
     return this.adapter.getTooltips()
   }
