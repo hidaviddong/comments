@@ -1,10 +1,12 @@
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
+import { useMouseHover } from './hooks'
 import Page from './page'
 import { sessionAtom } from './store'
 import { supabase } from './supabaseClient'
 export default function App() {
+  useMouseHover()
   const [session, setSession] = useAtom(sessionAtom)
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

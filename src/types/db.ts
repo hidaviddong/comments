@@ -6,24 +6,24 @@ export interface Database {
       comments: {
         Row: {
           comment_content: string | null
-          comment_id: number
+          comment_id: string
           comment_resolved: boolean | null
           profile_id: string | null
-          tooltip_id: number | null
+          tooltip_id: string | null
         }
         Insert: {
           comment_content?: string | null
-          comment_id?: number
+          comment_id: string
           comment_resolved?: boolean | null
           profile_id?: string | null
-          tooltip_id?: number | null
+          tooltip_id?: string | null
         }
         Update: {
           comment_content?: string | null
-          comment_id?: number
+          comment_id?: string
           comment_resolved?: boolean | null
           profile_id?: string | null
-          tooltip_id?: number | null
+          tooltip_id?: string | null
         }
         Relationships: [
           {
@@ -65,46 +65,65 @@ export interface Database {
           }
         ]
       }
-      projects: {
+      project_profiles: {
         Row: {
-          profile_id: string | null
-          project_id: number
-          project_name: string | null
+          profile_id: string
+          project_id: string
         }
         Insert: {
-          profile_id?: string | null
-          project_id?: number
-          project_name?: string | null
+          profile_id: string
+          project_id: string
         }
         Update: {
-          profile_id?: string | null
-          project_id?: number
-          project_name?: string | null
+          profile_id?: string
+          project_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'projects_profile_id_fkey'
+            foreignKeyName: 'project_profiles_profile_id_fkey'
             columns: ['profile_id']
             isOneToOne: false
             referencedRelation: 'profiles'
             referencedColumns: ['profile_id']
+          },
+          {
+            foreignKeyName: 'project_profiles_project_id_fkey'
+            columns: ['project_id']
+            isOneToOne: false
+            referencedRelation: 'projects'
+            referencedColumns: ['project_id']
           }
         ]
       }
+      projects: {
+        Row: {
+          project_id: string
+          project_name: string | null
+        }
+        Insert: {
+          project_id: string
+          project_name?: string | null
+        }
+        Update: {
+          project_id?: string
+          project_name?: string | null
+        }
+        Relationships: []
+      }
       routes: {
         Row: {
-          project_id: number | null
-          route_id: number
+          project_id: string | null
+          route_id: string
           route_name: string | null
         }
         Insert: {
-          project_id?: number | null
-          route_id?: number
+          project_id?: string | null
+          route_id: string
           route_name?: string | null
         }
         Update: {
-          project_id?: number | null
-          route_id?: number
+          project_id?: string | null
+          route_id?: string
           route_name?: string | null
         }
         Relationships: [
@@ -119,34 +138,24 @@ export interface Database {
       }
       tooltips: {
         Row: {
-          project_id: number | null
-          route_id: number | null
-          tooltip_id: number
+          route_id: string | null
+          tooltip_id: string
           x: number | null
           y: number | null
         }
         Insert: {
-          project_id?: number | null
-          route_id?: number | null
-          tooltip_id?: number
+          route_id?: string | null
+          tooltip_id: string
           x?: number | null
           y?: number | null
         }
         Update: {
-          project_id?: number | null
-          route_id?: number | null
-          tooltip_id?: number
+          route_id?: string | null
+          tooltip_id?: string
           x?: number | null
           y?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: 'tooltips_project_id_fkey'
-            columns: ['project_id']
-            isOneToOne: false
-            referencedRelation: 'projects'
-            referencedColumns: ['project_id']
-          },
           {
             foreignKeyName: 'tooltips_route_id_fkey'
             columns: ['route_id']
@@ -188,12 +197,12 @@ export type Tables<
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] & Database['public']['Views'])
-  ? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+    ? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends keyof Database['public']['Tables'] | { schema: keyof Database },
@@ -207,12 +216,12 @@ export type TablesInsert<
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends keyof Database['public']['Tables'] | { schema: keyof Database },
@@ -226,12 +235,12 @@ export type TablesUpdate<
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends keyof Database['public']['Enums'] | { schema: keyof Database },
@@ -241,5 +250,5 @@ export type Enums<
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
   : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-  ? Database['public']['Enums'][PublicEnumNameOrOptions]
-  : never
+    ? Database['public']['Enums'][PublicEnumNameOrOptions]
+    : never

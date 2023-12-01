@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 
-import { getComments } from '@/api'
+import { commentsService } from '@/api'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -15,7 +15,12 @@ import { TooltipsProps } from '../types'
 type Checked = DropdownMenuCheckboxItemProps['checked']
 
 export function DialogList() {
-  const { data: comments, isPending, isError, error } = useQuery({ queryKey: ['comments'], queryFn: getComments })
+  const {
+    data: comments,
+    isPending,
+    isError,
+    error
+  } = useQuery({ queryKey: ['comments'], queryFn: commentsService.getComments })
   if (isPending) {
     return <span>Loading...</span>
   }

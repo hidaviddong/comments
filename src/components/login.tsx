@@ -3,6 +3,7 @@ import { useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { commentsService } from '@/api'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -27,11 +28,7 @@ export default function Login() {
   })
 
   async function onLoginFormSubmit(formData: LoginFormSchemaType) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password
-    })
-    console.log(data.user)
+    const { data, error } = await commentsService.login(formData.email, formData.password)
     if (data.user) {
       toast({
         title: 'Login Success!'

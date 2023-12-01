@@ -1,18 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 
-import { getTooltips } from './api'
+import { commentsService } from './api'
 import FooterMenu from './components/footer-menu'
 import TooltipPopover from './components/tooltip-popover'
 import { sessionAtom } from './store'
 
 export default function Page() {
   const [session] = useAtom(sessionAtom)
+
   const {
     data: tooltips,
     isError,
     error
-  } = useQuery({ queryKey: ['tooltips'], queryFn: getTooltips, enabled: !!session })
+  } = useQuery({ queryKey: ['tooltips'], queryFn: commentsService.getTooltips, enabled: !!session })
   if (isError) {
     return <span>{error.message}</span>
   }
