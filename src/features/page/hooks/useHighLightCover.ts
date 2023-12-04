@@ -6,7 +6,7 @@ import { isOpenAtom, tooltipsAtom } from '@/store'
 import { TooltipsType } from '@/types'
 import { getRandomInteger } from '@/utils'
 
-export function useMouseHover() {
+export function useHighLightCover() {
   const queryClient = useQueryClient()
   const isOpen = useAtomValue(isOpenAtom)
   const setTooltips = useSetAtom(tooltipsAtom)

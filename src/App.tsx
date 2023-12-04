@@ -1,26 +1,22 @@
-import { useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
-import { useMouseHover } from './hooks'
-import Page from './page'
-import { sessionAtom } from './store'
-import { supabase } from './supabaseClient'
+import Footer from '@/features/footer'
+import Page from '@/features/page'
+import { useAuth } from '@/features/page/hooks'
+
+import { commentsService } from './api'
+
 export default function App() {
-  useMouseHover()
-  const [session, setSession] = useAtom(sessionAtom)
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
-
-    const {
-      data: { subscription }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [session, setSession])
-
-  return <Page />
+  const session = useAuth()
+  const { data } = useQuery({
+    queryKey: ['tooltips'],
+    queryFn: commentsService.getTooltips,
+    enabled: !!session
+  })
+  return (
+    <>
+      {session && data?.map((tooltip) => <Page x={tooltip.x} y={tooltip.y} key={tooltip.tooltip_id} />)}
+      <Footer />
+    </>
+  )
 }

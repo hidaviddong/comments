@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 
 import { commentsService } from '@/api'
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
 import { buttonTextAtom, isOpenAtom, sessionAtom } from '@/store'
 
-import Auth from './auth'
-import { Button } from './ui/button'
-import { useToast } from './ui/use-toast'
+import Auth from './components/auth'
 
-export default function FooterMenu() {
+export default function Footer() {
   const session = useAtomValue(sessionAtom)
   const { data: profile } = useQuery({
     queryKey: ['profile'],

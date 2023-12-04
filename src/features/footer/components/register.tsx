@@ -8,8 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { authAtom } from '@/store'
-
-import { supabase } from '../supabaseClient'
+import { supabase } from '@/supabaseClient'
 const RegisterFormSchema = z.object({
   email: z.string().email(),
   password: z.string()
