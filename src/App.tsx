@@ -2,15 +2,15 @@ import { useQuery } from '@tanstack/react-query'
 
 import Footer from '@/features/footer'
 import Page from '@/features/page'
-import { useAuth } from '@/features/page/hooks'
 
 import { commentsService } from './api'
+import { useAuth } from './features/page/hooks'
 
 export default function App() {
   const session = useAuth()
   const { data } = useQuery({
     queryKey: ['tooltips'],
-    queryFn: commentsService.getTooltips,
+    queryFn: () => commentsService.getTooltips(),
     enabled: !!session
   })
   return (

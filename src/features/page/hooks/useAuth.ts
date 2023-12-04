@@ -18,6 +18,6 @@ export function useAuth() {
     })
 
     return () => subscription.unsubscribe()
-  }, [session, setSession])
+  }, [])
   return session
 }

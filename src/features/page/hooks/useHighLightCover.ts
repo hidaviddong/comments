@@ -1,14 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { RESET } from 'jotai/utils'
 import { useEffect } from 'react'
 
-import { isOpenAtom, tooltipsAtom } from '@/store'
-import { TooltipsType } from '@/types'
-import { getRandomInteger } from '@/utils'
+import { highLightAtom, isOpenAtom, tooltipsAtom } from '@/store'
+// import { TooltipsType } from '@/types'
+// import { getRandomInteger } from '@/utils'
 
 export function useHighLightCover() {
   const queryClient = useQueryClient()
   const isOpen = useAtomValue(isOpenAtom)
+  const setHighLightAtom = useSetAtom(highLightAtom)
   const setTooltips = useSetAtom(tooltipsAtom)
   useEffect(() => {
     const handleMouseOver = (event: MouseEvent) => {
@@ -26,34 +28,21 @@ export function useHighLightCover() {
         ) {
           return
         }
-        targetElement.dataset.originalBorder = targetElement.style.border
-        targetElement.style.border = '1px solid red'
-
         const rect = targetElement.getBoundingClientRect()
-        const x = rect.left + rect.width - 10 // 右边界坐标
-        const y = rect.top + rect.height - 10 // 下边界坐标
-        const tooltip_id = getRandomInteger(0, 9)
-        // 合并数据并更新缓存
-        queryClient.setQueryData<TooltipsType[]>(['tooltips'], (oldData) => {
-          // 确保 oldData 不是 null 或 undefined
-          const existingData = oldData || []
-          // 合并逻辑，排除重复项
-          return [
-            ...existingData,
-            {
-              project_id: 1,
-              route_id: 1,
-              tooltip_id,
-              x,
-              y
-            }
-          ]
+        setHighLightAtom({
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+          height: rect.height
         })
+        // const x = rect.left + rect.width - 10 // 右边界坐标
+        // const y = rect.top + rect.height - 10 // 下边界坐标
+        // const tooltip_id = getRandomInteger(0, 9)
       }
     }
     const handleMouseOut = (event: MouseEvent) => {
       if (event.target instanceof HTMLElement) {
-        event.target.style.border = event.target.dataset.originalBorder || ''
+        setHighLightAtom(RESET)
       }
     }
 
@@ -69,5 +58,5 @@ export function useHighLightCover() {
       document.removeEventListener('mouseover', handleMouseOver)
       document.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [isOpen, setTooltips, queryClient])
+  }, [isOpen, setTooltips, setHighLightAtom, queryClient])
 }

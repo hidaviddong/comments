@@ -10,7 +10,7 @@ export function DialogList() {
     isPending,
     isError,
     error
-  } = useQuery({ queryKey: ['comments'], queryFn: commentsService.getComments })
+  } = useQuery({ queryKey: ['comments'], queryFn: () => commentsService.getComments() })
   if (isPending) {
     return <span>Loading...</span>
   }
