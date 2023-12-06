@@ -3,7 +3,6 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import { currentRouteAtom, highLightAtom, isOpenAtom, tooltipAtom } from '@/store'
-import { TooltipsType } from '@/types'
 
 import { useTooltipsQuery } from '.'
 
@@ -35,9 +34,6 @@ export function useHighLightCover() {
           width: rect.width,
           height: rect.height
         })
-        // check if already have tooltip
-        // todo : router
-
         const tooltipX = rect.left + rect.width / 2 - 10
         const tooltipY = rect.top + rect.height / 2 - 10
         serverTooltips?.forEach((tooltip) => {
