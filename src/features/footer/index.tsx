@@ -1,4 +1,5 @@
 // import { useQuery } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import type { SVGProps } from 'react'
 
@@ -52,6 +53,8 @@ export default function Footer() {
   //   queryFn: () => commentsService.getProjects(),
   //   enabled: !!session
   // })
+
+  const queryClient = useQueryClient()
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
   async function handleLogoutClick() {
@@ -71,7 +74,14 @@ export default function Footer() {
             <>
               <IconamoonCommentAdd
                 className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => {
+                  if (isOpen) {
+                    queryClient.invalidateQueries({
+                      queryKey: ['tooltips']
+                    })
+                  }
+                  setIsOpen(!isOpen)
+                }}
               />
               <MaterialSymbolsLogout
                 className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"

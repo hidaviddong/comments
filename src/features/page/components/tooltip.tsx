@@ -9,10 +9,10 @@ import { TooltipsProps } from '@/types'
 import { DialogList } from './dialog-list'
 type Checked = DropdownMenuCheckboxItemProps['checked']
 
-function BubbleCard({ x, y }: TooltipsProps) {
+function TooltipCard({ x, y }: TooltipsProps) {
   return (
     <div
-      className="absolute h-52 w-72 space-y-2 rounded-md border p-2 shadow"
+      className="absolute h-52 w-72 space-y-2 rounded-md border bg-white p-2 shadow"
       style={{ left: `${x}px`, top: `${y}px` }}>
       <DialogList />
       <div className="mt-1 flex w-full max-w-sm items-center space-x-2">
@@ -25,14 +25,14 @@ function BubbleCard({ x, y }: TooltipsProps) {
   )
 }
 
-export function Bubble({ x, y }: TooltipsProps) {
+export function Tooltip({ x, y }: TooltipsProps) {
   const [showBubbleCard, setShowBubbleCard] = useState<Checked>(true)
   return (
     <>
       <Button variant="outline" size="icon" className="absolute h-6 w-6" style={{ left: `${x}px`, top: `${y}px` }}>
         <ChevronDownIcon className="h-4 w-4" onClick={() => setShowBubbleCard(!showBubbleCard)} />
       </Button>
-      {x && y && !showBubbleCard && <BubbleCard x={x} y={y + 30} />}
+      {x && y && !showBubbleCard && <TooltipCard x={x} y={y + 30} />}
     </>
   )
 }
