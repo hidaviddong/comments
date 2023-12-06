@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -8,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import { authAtom } from '@/store'
 
 const LoginFormSchema = z.object({
   email: z.string().email(),
@@ -17,7 +15,6 @@ const LoginFormSchema = z.object({
 type LoginFormSchemaType = z.infer<typeof LoginFormSchema>
 export default function Login() {
   const { toast } = useToast()
-  const [, setAuthAtom] = useAtom(authAtom)
   const registerForm = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -32,7 +29,6 @@ export default function Login() {
       toast({
         title: 'Login Success!'
       })
-      // 查询信息
     }
     if (error) {
       toast({
@@ -40,9 +36,6 @@ export default function Login() {
         title: 'Login Failure! Please try again!'
       })
     }
-  }
-  function handleRegisterClick() {
-    setAuthAtom('register')
   }
   return (
     <Form {...registerForm}>
@@ -73,9 +66,8 @@ export default function Login() {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
-        <Button variant="ghost" onClick={handleRegisterClick}>
-          Register
+        <Button type="submit" className="w-full rounded-full">
+          Sign In
         </Button>
       </form>
     </Form>

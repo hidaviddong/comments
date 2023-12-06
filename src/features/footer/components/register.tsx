@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAtom } from 'jotai'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
@@ -7,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import { authAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
 const RegisterFormSchema = z.object({
   email: z.string().email(),
@@ -16,7 +14,6 @@ const RegisterFormSchema = z.object({
 type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>
 export default function Register() {
   const { toast } = useToast()
-  const [, setAuthAtom] = useAtom(authAtom)
   const registerForm = useForm<RegisterFormSchemaType>({
     resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
@@ -34,7 +31,6 @@ export default function Register() {
       toast({
         title: 'Please check your email!'
       })
-      setAuthAtom('login')
     }
     if (error) {
       toast({
@@ -42,9 +38,6 @@ export default function Register() {
         title: 'Register Failure! Please try again!'
       })
     }
-  }
-  function handleLoginClick() {
-    setAuthAtom('login')
   }
   return (
     <Form {...registerForm}>
@@ -56,7 +49,7 @@ export default function Register() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="hi@daviddong.me" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -75,9 +68,8 @@ export default function Register() {
             </FormItem>
           )}
         />
-        <Button type="submit">Register</Button>
-        <Button variant={'ghost'} onClick={handleLoginClick}>
-          Login
+        <Button type="submit" className="w-full rounded-full">
+          Sign Up
         </Button>
       </form>
     </Form>

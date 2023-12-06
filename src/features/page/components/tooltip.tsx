@@ -1,6 +1,7 @@
 import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
+import { Send } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -32,10 +33,10 @@ function TooltipCard({ x, y, tooltip_id }: TooltipsProps) {
       className="absolute h-52 w-72 space-y-2 rounded-md border bg-white p-2 shadow"
       style={{ left: `${x}px`, top: `${y! + 20}px` }}>
       <DialogList profile_id={session?.user.id || ''} tooltip_id={tooltip_id} />
-      <div className="mt-1 flex w-full max-w-sm items-center space-x-2">
-        <Input type="text" placeholder="Write the comment..." className="w-3/4" />
-        <Button type="submit" className="w-1/4" onClick={handleSendClick}>
-          Send
+      <div className="mt-1 flex w-full max-w-sm items-center justify-center space-x-2">
+        <Input type="text" placeholder="Write the comment..." className="w-48" />
+        <Button type="submit" className="w-24" onClick={handleSendClick}>
+          <Send />
         </Button>
       </div>
     </div>
