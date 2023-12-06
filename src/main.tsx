@@ -1,5 +1,3 @@
-import './index.css'
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -7,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { Toaster } from '@/components/ui/toaster'
 
 import App from './App.tsx'
+import tailwindStyle from './index.css?inline'
 
 function createComment(dom: HTMLElement) {
   const queryClient = new QueryClient()
@@ -14,11 +13,9 @@ function createComment(dom: HTMLElement) {
   const shadow = document.createElement('div')
   domRoot.appendChild(shadow)
 
-  const styleTags = document.getElementsByTagName('style')
-  if (styleTags.length !== 0) {
-    const lastStyleTag = styleTags[styleTags.length - 1]
-    domRoot.appendChild(lastStyleTag)
-  }
+  const styleTags = document.createElement('style')
+  styleTags.textContent = tailwindStyle
+  domRoot.appendChild(styleTags)
 
   const shadowRoot = createRoot(shadow)
   shadowRoot.render(
