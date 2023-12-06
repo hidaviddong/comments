@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { authAtom } from '@/store'
+
 const LoginFormSchema = z.object({
   email: z.string().email(),
   password: z.string()
@@ -31,6 +32,7 @@ export default function Login() {
       toast({
         title: 'Login Success!'
       })
+      // 查询信息
     }
     if (error) {
       toast({

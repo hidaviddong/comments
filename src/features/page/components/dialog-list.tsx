@@ -1,16 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
-
-import { commentsService } from '@/api'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 
-export function DialogList() {
-  const {
-    data: comments,
-    isPending,
-    isError,
-    error
-  } = useQuery({ queryKey: ['comments'], queryFn: () => commentsService.getComments() })
+import { useCommentsQuery } from '../hooks'
+
+export function DialogList({ profile_id, tooltip_id }: { profile_id: string; tooltip_id: string }) {
+  const { data: comments, isPending, isError, error } = useCommentsQuery(profile_id, tooltip_id)
   if (isPending) {
     return <span>Loading...</span>
   }

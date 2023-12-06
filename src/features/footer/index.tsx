@@ -1,4 +1,3 @@
-// import { useQuery } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import type { SVGProps } from 'react'
@@ -11,6 +10,7 @@ import { authAtom, isOpenAtom, sessionAtom } from '@/store'
 
 import Login from './components/login'
 import Register from './components/register'
+import { useProfileQuery } from './hooks'
 export function IconamoonCommentAdd(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
@@ -48,17 +48,14 @@ export function MaterialSymbolsLogout(props: SVGProps<SVGSVGElement>) {
 export default function Footer() {
   const session = useAtomValue(sessionAtom)
   const auth = useAtomValue(authAtom)
-  // const { data: profile } = useQuery({
-  //   queryKey: ['profile'],
-  //   queryFn: () => commentsService.getProjects(),
-  //   enabled: !!session
-  // })
+  useProfileQuery()
 
   const queryClient = useQueryClient()
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
   async function handleLogoutClick() {
     const { error } = await commentsService.logout()
+    setIsOpen(!isOpen)
     if (error) {
       toast({
         variant: 'destructive',

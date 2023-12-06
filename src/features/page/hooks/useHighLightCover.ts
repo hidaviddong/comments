@@ -3,6 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
 import { highLightAtom, isOpenAtom, tooltipAtom } from '@/store'
+import { TooltipsType } from '@/types'
 
 export function useHighLightCover() {
   const queryClient = useQueryClient()
@@ -30,13 +31,21 @@ export function useHighLightCover() {
           width: rect.width,
           height: rect.height
         })
-        // TODO check if already have bubble
-        // 如果存在的话就不存了
-        setTooltip({
-          x: rect.left + rect.width / 2 - 10,
-          y: rect.top + rect.height / 2 - 10,
-          tooltip_id: '',
-          route_id: ''
+        // check if already have tooltip
+        // todo : router
+        const currentTooltips = queryClient.getQueryData(['tooltips']) as TooltipsType
+        const tooltipX = rect.left + rect.width / 2 - 10
+        const tooltipY = rect.top + rect.height / 2 - 10
+        currentTooltips.forEach((tooltip) => {
+          if (tooltip.x === tooltipX && tooltip.y === tooltipY) {
+            return
+          }
+          setTooltip({
+            x: tooltipX,
+            y: tooltipY,
+            tooltip_id: '',
+            route_id: ''
+          })
         })
       }
     }

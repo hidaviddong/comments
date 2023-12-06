@@ -15,10 +15,6 @@ export class SupabaseAdapter implements APIAdapter {
     const { data } = await supabase.from('tooltips').select('*')
     return data
   }
-  async getComments() {
-    const { data } = await supabase.from('comments').select('*')
-    return data
-  }
   async getProjects() {
     const { data } = await supabase.from('projects').select('*')
     return data

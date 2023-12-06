@@ -1,4 +1,10 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export interface Database {
   public: {
@@ -13,7 +19,7 @@ export interface Database {
         }
         Insert: {
           comment_content?: string | null
-          comment_id: string
+          comment_id?: string
           comment_resolved?: boolean | null
           profile_id?: string | null
           tooltip_id?: string | null
@@ -27,18 +33,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'comments_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "comments_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['profile_id']
-          },
-          {
-            foreignKeyName: 'comments_tooltip_id_fkey'
-            columns: ['tooltip_id']
-            isOneToOne: false
-            referencedRelation: 'tooltips'
-            referencedColumns: ['tooltip_id']
+            referencedRelation: "profiles"
+            referencedColumns: ["profile_id"]
           }
         ]
       }
@@ -57,11 +56,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'profiles_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "profiles_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -80,18 +79,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'project_profiles_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: "project_profiles_profile_id_fkey"
+            columns: ["profile_id"]
             isOneToOne: false
-            referencedRelation: 'profiles'
-            referencedColumns: ['profile_id']
-          },
-          {
-            foreignKeyName: 'project_profiles_project_id_fkey'
-            columns: ['project_id']
-            isOneToOne: false
-            referencedRelation: 'projects'
-            referencedColumns: ['project_id']
+            referencedRelation: "profiles"
+            referencedColumns: ["profile_id"]
           }
         ]
       }
@@ -101,7 +93,7 @@ export interface Database {
           project_name: string | null
         }
         Insert: {
-          project_id: string
+          project_id?: string
           project_name?: string | null
         }
         Update: {
@@ -118,7 +110,7 @@ export interface Database {
         }
         Insert: {
           project_id?: string | null
-          route_id: string
+          route_id?: string
           route_name?: string | null
         }
         Update: {
@@ -128,11 +120,11 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: 'routes_project_id_fkey'
-            columns: ['project_id']
+            foreignKeyName: "routes_project_id_fkey"
+            columns: ["project_id"]
             isOneToOne: false
-            referencedRelation: 'projects'
-            referencedColumns: ['project_id']
+            referencedRelation: "projects"
+            referencedColumns: ["project_id"]
           }
         ]
       }
@@ -145,7 +137,7 @@ export interface Database {
         }
         Insert: {
           route_id?: string | null
-          tooltip_id: string
+          tooltip_id?: string
           x?: number | null
           y?: number | null
         }
@@ -155,15 +147,7 @@ export interface Database {
           x?: number | null
           y?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'tooltips_route_id_fkey'
-            columns: ['route_id']
-            isOneToOne: false
-            referencedRelation: 'routes'
-            referencedColumns: ['route_id']
-          }
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -183,72 +167,80 @@ export interface Database {
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database['public']['Tables'] & Database['public']['Views'])
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] & Database['public']['Views'])
-    ? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
     : never
+  : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends keyof Database['public']['Tables'] | { schema: keyof Database },
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
     : never
+  : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends keyof Database['public']['Tables'] | { schema: keyof Database },
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
-    ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
     : never
+  : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends keyof Database['public']['Enums'] | { schema: keyof Database },
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
-    ? Database['public']['Enums'][PublicEnumNameOrOptions]
-    : never
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never
