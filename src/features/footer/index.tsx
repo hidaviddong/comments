@@ -48,12 +48,12 @@ export function MaterialSymbolsLogout(props: SVGProps<SVGSVGElement>) {
 
 export default function Footer() {
   const session = useAtomValue(sessionAtom)
-  const [currentProjet, setCurrentProject] = useAtom(currentProjectAtom)
-  const [currentRoute, setCurrentRoute] = useAtom(currentRouteAtom)
+  const [, setCurrentProject] = useAtom(currentProjectAtom)
+  const [, setCurrentRoute] = useAtom(currentRouteAtom)
   const auth = useAtomValue(authAtom)
   const { data } = useProjectProfilesQuery()
-  const { data: routesData } = useRoutesQuery(currentProjet)
-  const { data: tooltipsData } = useTooltipsQuery(currentRoute)
+  const { data: routesData } = useRoutesQuery()
+  const { data: tooltipsData } = useTooltipsQuery()
   const queryClient = useQueryClient()
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)

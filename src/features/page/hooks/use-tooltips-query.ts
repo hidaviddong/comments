@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
+import { currentRouteAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
 
 async function getTooltipsById(route_id: string) {
@@ -7,14 +9,15 @@ async function getTooltipsById(route_id: string) {
   return data
 }
 
-export function useTooltipsQuery(route_id: string) {
-  const queryKey = ['tooltips', route_id]
+export function useTooltipsQuery() {
+  const currentRoute = useAtomValue(currentRouteAtom)
+  const queryKey = ['tooltips', currentRoute]
 
   const queryFn = async () => {
-    return getTooltipsById(route_id)
+    return getTooltipsById(currentRoute)
   }
 
-  return useQuery({ queryKey, queryFn })
+  return useQuery({ queryKey, queryFn, enabled: !!currentRoute })
 }
 
 export default useTooltipsQuery

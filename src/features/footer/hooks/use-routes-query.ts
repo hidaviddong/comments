@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
+import { currentProjectAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
 
 async function getRoutesById(project_id: string) {
@@ -7,11 +9,11 @@ async function getRoutesById(project_id: string) {
   return data
 }
 
-export function useRoutesQuery(project_id: string) {
-  const queryKey = ['routes', project_id]
-
+export function useRoutesQuery() {
+  const currentProject = useAtomValue(currentProjectAtom)
+  const queryKey = ['routes', currentProject]
   const queryFn = async () => {
-    return getRoutesById(project_id)
+    return getRoutesById(currentProject)
   }
-  return useQuery({ queryKey, queryFn })
+  return useQuery({ queryKey, queryFn, enabled: !!currentProject })
 }
