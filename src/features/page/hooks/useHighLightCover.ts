@@ -35,6 +35,7 @@ export function useHighLightCover() {
           width: rect.width,
           height: rect.height
         })
+        console.log(rect)
         // const x = rect.left + rect.width - 10 // 右边界坐标
         // const y = rect.top + rect.height - 10 // 下边界坐标
         // const tooltip_id = getRandomInteger(0, 9)

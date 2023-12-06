@@ -3,20 +3,22 @@ import { useAtom, useAtomValue } from 'jotai'
 import type { SVGProps } from 'react'
 
 import { commentsService } from '@/api'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/components/ui/use-toast'
-import { isOpenAtom, sessionAtom } from '@/store'
+import { authAtom, isOpenAtom, sessionAtom } from '@/store'
 
-// import Auth from './components/auth'
-
+import Login from './components/login'
+import Register from './components/register'
 export function IconamoonCommentAdd(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
       <path
         fill="none"
         stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
         d="M12 21a9 9 0 1 0-9-9c0 1.488.36 2.891 1 4.127L3 21l4.873-1c1.236.64 2.64 1 4.127 1Zm0-11.999v6m-3-3h6"></path>
     </svg>
   )
@@ -44,6 +46,7 @@ export function MaterialSymbolsLogout(props: SVGProps<SVGSVGElement>) {
 
 export default function Footer() {
   const session = useAtomValue(sessionAtom)
+  const auth = useAtomValue(authAtom)
   // const { data: profile } = useQuery({
   //   queryKey: ['profile'],
   //   queryFn: () => commentsService.getProjects(),
@@ -74,11 +77,28 @@ export default function Footer() {
                 className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
                 onClick={handleLogoutClick}
               />
+              <HoverCard>
+                <HoverCardTrigger className="">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full border bg-gray-100 text-center">
+                    D
+                  </div>
+                </HoverCardTrigger>
+                <HoverCardContent className="mb-2 mr-24">
+                  <div>Project</div>
+                  <Separator />
+                  <div>Comments</div>
+                </HoverCardContent>
+              </HoverCard>
             </>
           ) : (
             <>
-              <MaterialSymbolsLogin className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600" />
-              <span className="text-white">Login in to comment</span>
+              <HoverCard>
+                <HoverCardTrigger className="flex w-48 items-center justify-center hover:rounded-lg hover:bg-gray-600">
+                  <MaterialSymbolsLogin className="h-8 w-8 p-1 text-2xl text-white" />
+                  <span className="text-white">Login in to comment</span>
+                </HoverCardTrigger>
+                <HoverCardContent className="mb-2">{auth === 'login' ? <Login /> : <Register />}</HoverCardContent>
+              </HoverCard>
             </>
           )}
         </div>

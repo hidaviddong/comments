@@ -4,7 +4,6 @@ import { highLightAtom } from '@/store'
 
 export default function Highlight() {
   const highLight = useAtomValue(highLightAtom)
-
   return (
     <div
       style={{ top: highLight.top, left: highLight.left, width: highLight.width, height: highLight.height }}
