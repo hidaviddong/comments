@@ -6,11 +6,12 @@ import { commentsService } from '@/api'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/components/ui/use-toast'
-import { authAtom, isOpenAtom, sessionAtom } from '@/store'
+import { authAtom, currentProjectAtom, currentRouteAtom, isOpenAtom, sessionAtom } from '@/store'
 
+import { useTooltipsQuery } from '../page/hooks'
 import Login from './components/login'
 import Register from './components/register'
-import { useProfileQuery } from './hooks'
+import { useProjectProfilesQuery, useRoutesQuery } from './hooks'
 export function IconamoonCommentAdd(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
@@ -47,9 +48,12 @@ export function MaterialSymbolsLogout(props: SVGProps<SVGSVGElement>) {
 
 export default function Footer() {
   const session = useAtomValue(sessionAtom)
+  const [currentProjet, setCurrentProject] = useAtom(currentProjectAtom)
+  const [currentRoute, setCurrentRoute] = useAtom(currentRouteAtom)
   const auth = useAtomValue(authAtom)
-  useProfileQuery()
-
+  const { data } = useProjectProfilesQuery()
+  const { data: routesData } = useRoutesQuery(currentProjet)
+  const { data: tooltipsData } = useTooltipsQuery(currentRoute)
   const queryClient = useQueryClient()
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
@@ -90,11 +94,42 @@ export default function Footer() {
                     D
                   </div>
                 </HoverCardTrigger>
-                <HoverCardContent className="mb-2 mr-24">
-                  <div>Project</div>
-                  <Separator />
-                  <div>Comments</div>
-                </HoverCardContent>
+                {data && (
+                  <HoverCardContent className="mb-2 mr-24">
+                    <div>Projects</div>
+                    <div>
+                      {data[0].project_profiles.map((project) => (
+                        <li
+                          onClick={() => {
+                            setCurrentProject(project.project_id)
+                          }}
+                          key={project.project_id}>
+                          {project.project_id}
+                        </li>
+                      ))}
+                    </div>
+                    <Separator />
+                    <div>Routes</div>
+                    <div>
+                      {routesData?.map((route) => (
+                        <li
+                          onClick={() => {
+                            setCurrentRoute(route.route_id)
+                          }}
+                          key={route.route_id}>
+                          {route.route_name}
+                        </li>
+                      ))}
+                    </div>
+                    <Separator />
+                    <div>Tooltips</div>
+                    <div>
+                      {tooltipsData?.map((tooltips) => <li key={tooltips.tooltip_id}>{tooltips.tooltip_id}</li>)}
+                    </div>
+                    <Separator />
+                    <div>Comments</div>
+                  </HoverCardContent>
+                )}
               </HoverCard>
             </>
           ) : (

@@ -2,14 +2,18 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { highLightAtom, isOpenAtom, tooltipAtom } from '@/store'
+import { currentRouteAtom, highLightAtom, isOpenAtom, tooltipAtom } from '@/store'
 import { TooltipsType } from '@/types'
+
+import { useTooltipsQuery } from '.'
 
 export function useHighLightCover() {
   const queryClient = useQueryClient()
   const isOpen = useAtomValue(isOpenAtom)
   const setHighLight = useSetAtom(highLightAtom)
   const setTooltip = useSetAtom(tooltipAtom)
+  const currentRoute = useAtomValue(currentRouteAtom)
+  const { data: serverTooltips } = useTooltipsQuery(currentRoute)
   useEffect(() => {
     const handleMouseOver = (event: MouseEvent) => {
       const targetElement = event.target
@@ -33,10 +37,10 @@ export function useHighLightCover() {
         })
         // check if already have tooltip
         // todo : router
-        const currentTooltips = queryClient.getQueryData(['tooltips']) as TooltipsType
+
         const tooltipX = rect.left + rect.width / 2 - 10
         const tooltipY = rect.top + rect.height / 2 - 10
-        currentTooltips.forEach((tooltip) => {
+        serverTooltips?.forEach((tooltip) => {
           if (tooltip.x === tooltipX && tooltip.y === tooltipY) {
             return
           }

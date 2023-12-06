@@ -19,3 +19,5 @@ export const highLightAtom = atomWithReset({
   width: 0,
   height: 0
 })
+export const currentProjectAtom = atom('')
+export const currentRouteAtom = atom('')
