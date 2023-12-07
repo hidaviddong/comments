@@ -20,6 +20,7 @@ function TooltipCard({ x, y, tooltip_id }: TooltipsProps) {
   const session = useAuth()
   const currentProject = useAtomValue(currentProjectAtom)
   const handleSendClick = async () => {
+    console.log(currentProject)
     // 在这个坐标下，如果没有新对话，就创建一个新的对话并发送comment
     await supabase.from('tooltips').insert({
       x,
@@ -38,7 +39,7 @@ function TooltipCard({ x, y, tooltip_id }: TooltipsProps) {
       <DialogList profile_id={session?.user.id || ''} tooltip_id={tooltip_id} />
       <div className="mt-1 flex w-full max-w-sm items-center justify-center space-x-2">
         <Input type="text" placeholder="Write the comment..." className="w-48" />
-        <Button type="submit" className="w-24" onClick={handleSendClick}>
+        <Button className="w-24" onClick={handleSendClick}>
           <Send />
         </Button>
       </div>
@@ -48,12 +49,13 @@ function TooltipCard({ x, y, tooltip_id }: TooltipsProps) {
 
 export function Tooltip({ x, y, tooltip_id }: TooltipsProps) {
   const [showBubbleCard, setShowBubbleCard] = useState<Checked>(true)
+  const currentProject = useAtomValue(currentProjectAtom)
   return (
     <>
       <Button variant="outline" size="icon" className="absolute h-6 w-6" style={{ left: `${x}px`, top: `${y}px` }}>
         <ChevronDownIcon className="h-4 w-4" onClick={() => setShowBubbleCard(!showBubbleCard)} />
       </Button>
-      {x && y && !showBubbleCard && <TooltipCard x={x} y={y} tooltip_id={tooltip_id} />}
+      {currentProject && x && y && !showBubbleCard && <TooltipCard x={x} y={y} tooltip_id={tooltip_id} />}
     </>
   )
 }

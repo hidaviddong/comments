@@ -224,7 +224,7 @@ function ToolFooter() {
               </Form>
             ) : (
               <select
-                defaultValue={currentProject === '' ? 'Please select your projects' : currentProject}
+                value={currentProject === '' ? 'Please select your projects' : currentProject}
                 onChange={(e) => {
                   const value = e.target.value
                   setCurrentProject(value)
