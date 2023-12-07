@@ -1,11 +1,13 @@
 import { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 import { Send } from 'lucide-react'
 import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { currentProjectAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
 import { TooltipsProps } from '@/types'
 
@@ -16,16 +18,17 @@ type Checked = DropdownMenuCheckboxItemProps['checked']
 function TooltipCard({ x, y, tooltip_id }: TooltipsProps) {
   const queryClient = useQueryClient()
   const session = useAuth()
+  const currentProject = useAtomValue(currentProjectAtom)
   const handleSendClick = async () => {
     // 在这个坐标下，如果没有新对话，就创建一个新的对话并发送comment
     await supabase.from('tooltips').insert({
       x,
       y,
-      route_id: 'bd9ac14e-6af6-417f-812b-ed927af4c62f'
+      project_id: currentProject
     })
     // 重新获取一次
     await queryClient.invalidateQueries({
-      queryKey: ['tooltips']
+      queryKey: ['tooltips', currentProject]
     })
   }
   return (

@@ -1,15 +1,14 @@
 import { useAtomValue } from 'jotai'
 
-import { currentRouteAtom, isOpenAtom, tooltipAtom } from '@/store'
+import { isOpenAtom, tooltipAtom } from '@/store'
 
 import Highlight from './components/highlight'
 import { Tooltip } from './components/tooltip'
 import { useAuth, useTooltipsQuery } from './hooks'
 export default function Page() {
   const isOpen = useAtomValue(isOpenAtom)
-  const currentRoute = useAtomValue(currentRouteAtom)
   const session = useAuth()
-  const { data: serverTooltips } = useTooltipsQuery(currentRoute)
+  const { data: serverTooltips } = useTooltipsQuery()
 
   const clientTooltip = useAtomValue(tooltipAtom)
   return (

@@ -33,7 +33,7 @@ export default function Login() {
     if (error) {
       toast({
         variant: 'destructive',
-        title: 'Login Failure! Please try again!'
+        title: 'Login Fail! Please try again!'
       })
     }
   }

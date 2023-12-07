@@ -1,23 +1,23 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import { currentRouteAtom } from '@/store'
+import { currentProjectAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
 
-async function getTooltipsById(route_id: string) {
-  const { data } = await supabase.from('tooltips').select('*').eq('route_id', route_id)
+async function getTooltipsById(project_id: string) {
+  const { data } = await supabase.from('tooltips').select('*').eq('project_id', project_id)
   return data
 }
 
 export function useTooltipsQuery() {
-  const currentRoute = useAtomValue(currentRouteAtom)
-  const queryKey = ['tooltips', currentRoute]
+  const currentProject = useAtomValue(currentProjectAtom)
+  const queryKey = ['tooltips', currentProject]
 
   const queryFn = async () => {
-    return getTooltipsById(currentRoute)
+    return getTooltipsById(currentProject)
   }
 
-  return useQuery({ queryKey, queryFn, enabled: !!currentRoute })
+  return useQuery({ queryKey, queryFn, enabled: !!currentProject })
 }
 
 export default useTooltipsQuery

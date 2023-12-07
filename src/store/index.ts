@@ -5,7 +5,7 @@ import { atomWithReset } from 'jotai/utils'
 import type { AuthType, TooltipsType } from '@/types'
 export const isOpenAtom = atom(false)
 export const tooltipAtom = atom<TooltipsType[number]>({
-  route_id: '',
+  project_id: '',
   tooltip_id: '',
   x: null,
   y: null
@@ -20,4 +20,3 @@ export const highLightAtom = atomWithReset({
   height: 0
 })
 export const currentProjectAtom = atom('')
-export const currentRouteAtom = atom('')

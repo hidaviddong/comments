@@ -1,19 +1,35 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
-import { useAtom, useAtomValue } from 'jotai'
-import { Mail } from 'lucide-react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { Mail, User } from 'lucide-react'
 import { type SVGProps, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { commentsService } from '@/api'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useToast } from '@/components/ui/use-toast'
-import { currentProjectAtom, currentRouteAtom, isOpenAtom, sessionAtom } from '@/store'
+import { currentProjectAtom, isOpenAtom, sessionAtom } from '@/store'
+import { supabase } from '@/supabaseClient'
 
-import { useTooltipsQuery } from '../page/hooks'
+import { useAuth } from '../page/hooks'
 import Login from './components/login'
 import Register from './components/register'
-import { useProjectProfilesQuery, useRoutesQuery } from './hooks'
+import { useProjectProfilesQuery } from './hooks'
+
+const ProjectFormSchema = z.object({
+  project_name: z
+    .string()
+    .min(1, { message: 'Please provide a project name.' })
+    .max(15, { message: 'Project name should be under 15 characters.' })
+})
+
+type ProjectFormSchemaType = z.infer<typeof ProjectFormSchema>
 
 export function IconamoonCommentAdd(props: SVGProps<SVGSVGElement>) {
   return (
@@ -78,17 +94,21 @@ function SignFooter() {
     </>
   )
 }
-export default function Footer() {
-  const [showSignForm, setShowSignForm] = useState(false)
-  const session = useAtomValue(sessionAtom)
-  const [, setCurrentProject] = useAtom(currentProjectAtom)
-  const [, setCurrentRoute] = useAtom(currentRouteAtom)
-  const { data } = useProjectProfilesQuery()
-  const { data: routesData } = useRoutesQuery()
-  const { data: tooltipsData } = useTooltipsQuery()
+function ToolFooter() {
+  const [isUserOpen, setIsUserOpen] = useState(false)
+  const [showCreateProject, setShowCreateProject] = useState(false)
+  const [isOpen, setIsOpen] = useAtom(isOpenAtom)
   const queryClient = useQueryClient()
   const { toast } = useToast()
-  const [isOpen, setIsOpen] = useAtom(isOpenAtom)
+  const setCurrentProject = useSetAtom(currentProjectAtom)
+  const { data: projectsData, refetch: refetchProjectsData } = useProjectProfilesQuery()
+  const session = useAuth()
+  const projectForm = useForm<ProjectFormSchemaType>({
+    resolver: zodResolver(ProjectFormSchema),
+    defaultValues: {
+      project_name: ''
+    }
+  })
   async function handleLogoutClick() {
     setIsOpen(!isOpen)
     const { error } = await commentsService.logout()
@@ -99,71 +119,149 @@ export default function Footer() {
       })
     }
   }
+  async function onProjectFormSubmit({ project_name }: ProjectFormSchemaType) {
+    // 先查找是否有重名的项目
+    const { data, error: searchError } = await supabase
+      .from('projects')
+      .select('project_id')
+      .eq('project_name', project_name)
+
+    if (searchError) {
+      console.error('Error searching project:', searchError.message)
+      toast({
+        variant: 'destructive',
+        title: 'Error searching for project. Please try again!'
+      })
+      return
+    }
+
+    if (data.length > 0) {
+      // 如果找到了重名的项目，不允许创建并显示提示
+      toast({
+        variant: 'destructive',
+        title: 'Project with this name already exists!'
+      })
+      return
+    }
+    const { data: newProjectData, error } = await supabase.from('projects').insert({ project_name }).select()
+
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Create Project Fail! Please try again!'
+      })
+    } else {
+      if (newProjectData) {
+        const newProjectId = newProjectData[0].project_id
+        const { error } = await supabase.from('project_profiles').insert({
+          project_id: newProjectId,
+          profile_id: session!.user.id
+        })
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: 'Create Project Fail! Please try again!'
+          })
+        } else {
+          toast({
+            title: 'Craete Project Success!'
+          })
+          await refetchProjectsData()
+          setShowCreateProject(false)
+          projectForm.reset()
+        }
+      }
+    }
+  }
+
   return (
-    <div className="fixed bottom-1 left-1/2 flex h-12 w-80 -translate-x-1/2 transform items-center justify-around rounded-full border bg-black shadow-sm">
+    <>
+      <IconamoonCommentAdd
+        className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
+        onClick={() => {
+          if (isOpen) {
+            queryClient.invalidateQueries({
+              queryKey: ['tooltips']
+            })
+          }
+          setIsOpen(!isOpen)
+        }}
+      />
+      <div
+        onClick={() => setIsUserOpen(!isUserOpen)}
+        className="flex h-8 w-8 items-center justify-center rounded-full border bg-gray-100 text-center">
+        <User />
+      </div>
+      <MaterialSymbolsLogout
+        className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
+        onClick={handleLogoutClick}
+      />
+
+      {isUserOpen && projectsData && (
+        <Card className="absolute bottom-14 right-2 w-[320px] shadow-lg">
+          <CardHeader>
+            <CardTitle>Projects</CardTitle>
+            <CardDescription>Select or Create your new project.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {showCreateProject ? (
+              <Form {...projectForm}>
+                <form>
+                  <FormField
+                    control={projectForm.control}
+                    name="project_name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Project Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </form>
+              </Form>
+            ) : (
+              <select
+                onChange={(e) => {
+                  const value = e.target.value
+                  setCurrentProject(value)
+                }}
+                className="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900">
+                {projectsData.map((project) => (
+                  <option key={project.project_id} value={project.project_id}>
+                    {project.project_name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </CardContent>
+          {!showCreateProject ? (
+            <CardFooter className="flex flex-col justify-center space-y-2">
+              <Separator />
+              <Button onClick={() => setShowCreateProject(true)}>Create Project</Button>
+            </CardFooter>
+          ) : (
+            <CardFooter className="flex justify-between">
+              <Button variant="secondary" onClick={() => setShowCreateProject(false)}>
+                Back
+              </Button>
+              <Button onClick={projectForm.handleSubmit(onProjectFormSubmit)}>Create</Button>
+            </CardFooter>
+          )}
+        </Card>
+      )}
+    </>
+  )
+}
+
+export default function Footer() {
+  const session = useAtomValue(sessionAtom)
+  return (
+    <div className="fixed bottom-1 left-1/2 flex h-12 w-80 -translate-x-1/2 transform items-center justify-around rounded-full border bg-black shadow-lg">
       <div className="flex h-full cursor-pointer items-center justify-center space-x-2 text-sm">
-        {session ? (
-          <>
-            <IconamoonCommentAdd
-              className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
-              onClick={() => {
-                if (isOpen) {
-                  queryClient.invalidateQueries({
-                    queryKey: ['tooltips']
-                  })
-                }
-                setIsOpen(!isOpen)
-              }}
-            />
-            <MaterialSymbolsLogout
-              className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
-              onClick={handleLogoutClick}
-            />
-            <HoverCard>
-              <HoverCardTrigger className="">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full border bg-gray-100 text-center">
-                  D
-                </div>
-              </HoverCardTrigger>
-              {data && (
-                <HoverCardContent className="mb-2 mr-24">
-                  <div>Projects</div>
-                  <div>
-                    {data[0].project_profiles.map((project) => (
-                      <li
-                        onClick={() => {
-                          setCurrentProject(project.project_id)
-                        }}
-                        key={project.project_id}>
-                        {project.project_id}
-                      </li>
-                    ))}
-                  </div>
-                  <Separator />
-                  <div>Routes</div>
-                  <div>
-                    {routesData?.map((route) => (
-                      <li
-                        onClick={() => {
-                          setCurrentRoute(route.route_id)
-                        }}
-                        key={route.route_id}>
-                        {route.route_name}
-                      </li>
-                    ))}
-                  </div>
-                  <Separator />
-                  <div>Tooltips</div>
-                  <div>{tooltipsData?.map((tooltips) => <li key={tooltips.tooltip_id}>{tooltips.tooltip_id}</li>)}</div>
-                  <Separator />
-                  <div>Comments</div>
-                </HoverCardContent>
-              )}
-            </HoverCard>
-          </>
-        ) : (
-          <SignFooter />
-        )}
+        {session ? <ToolFooter /> : <SignFooter />}
       </div>
     </div>
   )

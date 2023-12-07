@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import { currentRouteAtom, highLightAtom, isOpenAtom, tooltipAtom } from '@/store'
+import { highLightAtom, isOpenAtom, tooltipAtom } from '@/store'
 
 import { useTooltipsQuery } from '.'
 
@@ -11,8 +11,7 @@ export function useHighLightCover() {
   const isOpen = useAtomValue(isOpenAtom)
   const setHighLight = useSetAtom(highLightAtom)
   const setTooltip = useSetAtom(tooltipAtom)
-  const currentRoute = useAtomValue(currentRouteAtom)
-  const { data: serverTooltips } = useTooltipsQuery(currentRoute)
+  const { data: serverTooltips } = useTooltipsQuery()
   useEffect(() => {
     const handleMouseOver = (event: MouseEvent) => {
       const targetElement = event.target
@@ -44,7 +43,7 @@ export function useHighLightCover() {
             x: tooltipX,
             y: tooltipY,
             tooltip_id: '',
-            route_id: ''
+            project_id: ''
           })
         })
       }
@@ -56,5 +55,5 @@ export function useHighLightCover() {
     return () => {
       document.removeEventListener('mouseover', handleMouseOver)
     }
-  }, [isOpen, setTooltip, setHighLight, queryClient])
+  }, [isOpen, setTooltip, setHighLight, queryClient, serverTooltips])
 }
