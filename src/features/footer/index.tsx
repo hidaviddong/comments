@@ -100,7 +100,7 @@ function ToolFooter() {
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
   const queryClient = useQueryClient()
   const { toast } = useToast()
-  const setCurrentProject = useSetAtom(currentProjectAtom)
+  const [currentProject, setCurrentProject] = useAtom(currentProjectAtom)
   const { data: projectsData, refetch: refetchProjectsData } = useProjectProfilesQuery()
   const session = useAuth()
   const projectForm = useForm<ProjectFormSchemaType>({
@@ -224,7 +224,7 @@ function ToolFooter() {
               </Form>
             ) : (
               <select
-                defaultValue="Please select your projects"
+                defaultValue={currentProject === '' ? 'Please select your projects' : currentProject}
                 onChange={(e) => {
                   const value = e.target.value
                   setCurrentProject(value)
