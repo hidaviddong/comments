@@ -49,6 +49,35 @@ export function MaterialSymbolsLogout(props: SVGProps<SVGSVGElement>) {
   )
 }
 
+function SignFooter() {
+  const [showSignForm, setShowSignForm] = useState(false)
+  return (
+    <>
+      <Mail className="mr-2 h-6 w-6 p-1 text-2xl text-white" onClick={() => setShowSignForm(!showSignForm)} />
+      {showSignForm && (
+        <Tabs
+          defaultValue="Sign In"
+          style={{ bottom: '60px' }}
+          className="absolute right-0 w-full rounded-lg border p-4 shadow-lg">
+          <TabsList className="w-full rounded-full">
+            <TabsTrigger value="Sign In" className="w-48 rounded-full">
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger value="Sign Up" className="w-48 rounded-full">
+              Sign Up
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="Sign In">
+            <Login />
+          </TabsContent>
+          <TabsContent value="Sign Up">
+            <Register />
+          </TabsContent>
+        </Tabs>
+      )}
+    </>
+  )
+}
 export default function Footer() {
   const [showSignForm, setShowSignForm] = useState(false)
   const session = useAtomValue(sessionAtom)
@@ -133,30 +162,7 @@ export default function Footer() {
             </HoverCard>
           </>
         ) : (
-          <>
-            <Mail className="mr-2 h-6 w-6 p-1 text-2xl text-white" onClick={() => setShowSignForm(!showSignForm)} />
-            {showSignForm && (
-              <Tabs
-                defaultValue="Sign In"
-                style={{ bottom: '60px' }}
-                className="absolute right-0 w-full rounded-lg border p-4 shadow-lg">
-                <TabsList className="w-full rounded-full">
-                  <TabsTrigger value="Sign In" className="w-48 rounded-full">
-                    Sign In
-                  </TabsTrigger>
-                  <TabsTrigger value="Sign Up" className="w-48 rounded-full">
-                    Sign Up
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="Sign In">
-                  <Login />
-                </TabsContent>
-                <TabsContent value="Sign Up">
-                  <Register />
-                </TabsContent>
-              </Tabs>
-            )}
-          </>
+          <SignFooter />
         )}
       </div>
     </div>
