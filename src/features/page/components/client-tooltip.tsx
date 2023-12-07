@@ -1,7 +1,6 @@
 import { PlusIcon } from '@radix-ui/react-icons'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { currentProjectAtom, tooltipAtom } from '@/store'
