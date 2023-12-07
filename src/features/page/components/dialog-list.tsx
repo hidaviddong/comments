@@ -5,9 +5,9 @@ import { Separator } from '@/components/ui/separator'
 
 import { useCommentsQuery } from '../hooks'
 
-export function DialogList({ profile_id, tooltip_id }: { profile_id: string; tooltip_id: string }) {
-  const { data: comments, isPending, isError, error } = useCommentsQuery(profile_id, tooltip_id)
-  if (isPending) {
+export function DialogList({ tooltip_id }: { tooltip_id: string }) {
+  const { data: comments, isLoading, isError, error } = useCommentsQuery(tooltip_id)
+  if (isLoading) {
     return (
       <div className="flex h-36 w-full items-center justify-center">
         <LoaderIcon className="h-6 w-6 animate-spin"></LoaderIcon>
