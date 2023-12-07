@@ -21,7 +21,6 @@ async function getProjectProfilesById(profile_id: string) {
     .from('projects')
     .select('project_id, project_name')
     .in('project_id', projectIds)
-
   return projectsData
 }
 

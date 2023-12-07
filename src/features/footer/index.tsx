@@ -224,11 +224,15 @@ function ToolFooter() {
               </Form>
             ) : (
               <select
+                defaultValue="Please select your projects"
                 onChange={(e) => {
                   const value = e.target.value
                   setCurrentProject(value)
                 }}
                 className="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900">
+                <option value="Please select your projects" disabled>
+                  Please select your projects
+                </option>
                 {projectsData.map((project) => (
                   <option key={project.project_id} value={project.project_id}>
                     {project.project_name}
