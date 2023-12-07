@@ -47,7 +47,7 @@ export default function Login() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="hi@daviddong.me" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

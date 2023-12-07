@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import { Mail } from 'lucide-react'
-import type { SVGProps } from 'react'
+import { type SVGProps, useState } from 'react'
 
 import { commentsService } from '@/api'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
@@ -50,6 +50,7 @@ export function MaterialSymbolsLogout(props: SVGProps<SVGSVGElement>) {
 }
 
 export default function Footer() {
+  const [showSignForm, setShowSignForm] = useState(false)
   const session = useAtomValue(sessionAtom)
   const [, setCurrentProject] = useAtom(currentProjectAtom)
   const [, setCurrentRoute] = useAtom(currentRouteAtom)
@@ -60,8 +61,8 @@ export default function Footer() {
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
   async function handleLogoutClick() {
-    const { error } = await commentsService.logout()
     setIsOpen(!isOpen)
+    const { error } = await commentsService.logout()
     if (error) {
       toast({
         variant: 'destructive',
@@ -70,7 +71,7 @@ export default function Footer() {
     }
   }
   return (
-    <div className="fixed bottom-1 left-1/2 flex h-12 w-80 -translate-x-1/2 transform items-center justify-around rounded-full border bg-stone-800 shadow-sm">
+    <div className="fixed bottom-1 left-1/2 flex h-12 w-80 -translate-x-1/2 transform items-center justify-around rounded-full border bg-black shadow-sm">
       <div className="flex h-full cursor-pointer items-center justify-center space-x-2 text-sm">
         {session ? (
           <>
@@ -133,30 +134,28 @@ export default function Footer() {
           </>
         ) : (
           <>
-            <HoverCard>
-              <HoverCardTrigger className="flex w-48 items-center justify-center">
-                <Mail className="mr-2 h-6 w-6 p-1 text-2xl text-white" />
-                <span className="text-white">Sign with Email</span>
-              </HoverCardTrigger>
-              <HoverCardContent className="mb-2">
-                <Tabs defaultValue="Sign In" className="w-full">
-                  <TabsList className="w-full rounded-full">
-                    <TabsTrigger value="Sign In" className="w-48 rounded-full">
-                      Sign In
-                    </TabsTrigger>
-                    <TabsTrigger value="Sign Up" className="w-48 rounded-full">
-                      Sign Up
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="Sign In">
-                    <Login />
-                  </TabsContent>
-                  <TabsContent value="Sign Up">
-                    <Register />
-                  </TabsContent>
-                </Tabs>
-              </HoverCardContent>
-            </HoverCard>
+            <Mail className="mr-2 h-6 w-6 p-1 text-2xl text-white" onClick={() => setShowSignForm(!showSignForm)} />
+            {showSignForm && (
+              <Tabs
+                defaultValue="Sign In"
+                style={{ bottom: '60px' }}
+                className="absolute right-0 w-full rounded-lg border p-4 shadow-lg">
+                <TabsList className="w-full rounded-full">
+                  <TabsTrigger value="Sign In" className="w-48 rounded-full">
+                    Sign In
+                  </TabsTrigger>
+                  <TabsTrigger value="Sign Up" className="w-48 rounded-full">
+                    Sign Up
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="Sign In">
+                  <Login />
+                </TabsContent>
+                <TabsContent value="Sign Up">
+                  <Register />
+                </TabsContent>
+              </Tabs>
+            )}
           </>
         )}
       </div>
