@@ -35,13 +35,11 @@ export function useHighLightCover() {
         })
         const tooltipX = rect.left + rect.width / 2 - 10
         const tooltipY = rect.top + rect.height / 2 - 10
-        // 这里区分两个情况：
-        // 1、是空数组 可以直接setTooltip
-        // 2、有数据，先判断是否重合
-        // 检查是否有重合的 tooltip
-        const isOverlapping = serverTooltips?.some((tooltip) => tooltip.x === tooltipX && tooltip.y === tooltipY)
-
-        // 如果没有重合的 tooltip，设置新的 tooltip
+        const isOverlapping = serverTooltips?.some((tooltip) => {
+          if (tooltip.x && tooltip.y) {
+            Math.abs(tooltip.x! - tooltipX) <= 10 && Math.abs(tooltip.y! - tooltipY) <= 10
+          }
+        })
         if (!isOverlapping) {
           setTooltip({
             x: tooltipX,
