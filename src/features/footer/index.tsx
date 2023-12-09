@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
-import { Mail, User } from 'lucide-react'
+import { FolderOpenDot, Mail } from 'lucide-react'
 import { type SVGProps, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -67,7 +67,12 @@ function SignFooter() {
   const [showSignForm, setShowSignForm] = useState(false)
   return (
     <>
-      <Mail className="mr-2 h-6 w-6 p-1 text-2xl text-white" onClick={() => setShowSignForm(!showSignForm)} />
+      <div className="flex w-full items-center justify-center">
+        <Mail
+          className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
+          onClick={() => setShowSignForm(!showSignForm)}
+        />
+      </div>
       {showSignForm && (
         <Tabs
           defaultValue="Sign In"
@@ -176,7 +181,7 @@ function ToolFooter() {
     <>
       <IconamoonCommentAdd
         className={`h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-blue-500 ${
-          isOpen ? 'rounded-lg border-2 border-dashed border-white bg-blue-500 ' : ''
+          isOpen ? 'rounded-lg bg-blue-500 ' : ''
         }`}
         onClick={() => {
           if (isOpen) {
@@ -187,18 +192,17 @@ function ToolFooter() {
           setIsOpen(!isOpen)
         }}
       />
-      <div
+
+      <FolderOpenDot
         onClick={() => setIsUserOpen(!isUserOpen)}
-        className="flex h-8 w-8 items-center justify-center rounded-full border bg-gray-100 text-center">
-        <User />
-      </div>
+        className="flex h-8 w-8 items-center justify-center p-1 text-center text-white hover:rounded-lg hover:bg-gray-600"></FolderOpenDot>
       <MaterialSymbolsLogout
         className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
         onClick={handleLogoutClick}
       />
 
       {isUserOpen && projectsData && (
-        <Card className="absolute bottom-14 right-2 w-[320px] shadow-lg">
+        <Card className="absolute bottom-14  w-[300px] shadow-lg">
           <CardHeader>
             <CardTitle>Projects</CardTitle>
             <CardDescription>Select or Create your new project.</CardDescription>
@@ -241,17 +245,42 @@ function ToolFooter() {
               </select>
             )}
           </CardContent>
+          <Separator />
           {!showCreateProject ? (
-            <CardFooter className="flex flex-col justify-center space-y-2">
-              <Separator />
-              <Button onClick={() => setShowCreateProject(true)}>Create Project</Button>
+            <CardFooter className="mt-2 flex items-center justify-around">
+              <Button
+                className="rounded-full"
+                variant="destructive"
+                onClick={async () => {
+                  const { data, error } = await supabase
+                    .from('project_profiles')
+                    .delete()
+                    .eq('project_id', currentProject)
+                    .eq('profile_id', session!.user.id)
+                    .select()
+                  if (error) {
+                    console.error(error)
+                  }
+                  if (data) {
+                    await supabase.from('projects').delete().eq('project_id', data[0].project_id)
+                    await queryClient.invalidateQueries({ queryKey: ['project_profiles', session?.user.id] })
+                  }
+                }}>
+                Delete
+              </Button>
+              <span>or</span>
+              <Button className="rounded-full" onClick={() => setShowCreateProject(true)}>
+                Create
+              </Button>
             </CardFooter>
           ) : (
-            <CardFooter className="flex justify-between">
-              <Button variant="secondary" onClick={() => setShowCreateProject(false)}>
+            <CardFooter className="mt-2 flex justify-between">
+              <Button className="rounded-full" variant="secondary" onClick={() => setShowCreateProject(false)}>
                 Back
               </Button>
-              <Button onClick={projectForm.handleSubmit(onProjectFormSubmit)}>Create</Button>
+              <Button className="rounded-full" onClick={projectForm.handleSubmit(onProjectFormSubmit)}>
+                Create
+              </Button>
             </CardFooter>
           )}
         </Card>
