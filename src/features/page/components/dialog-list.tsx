@@ -50,7 +50,7 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <div className="mt-4 flex h-full w-full flex-col justify-center">
+              <div className="flex h-full w-full flex-col justify-center">
                 <span className="text-xs text-slate-300">{dayjs(comment.create_time).format('YYYY-MM-DD HH:mm')}</span>
                 <p className="text-sm"> {comment.comment_content}</p>
               </div>
