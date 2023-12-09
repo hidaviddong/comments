@@ -36,6 +36,7 @@
     "axios": "^1.6.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "dayjs": "^1.11.10",
     "jotai": "^2.4.3",
     "jotai-effect": "^0.2.3",
     "lucide-react": "^0.288.0",

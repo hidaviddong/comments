@@ -8,6 +8,7 @@ export interface Database {
           comment_content: string | null
           comment_id: string
           comment_resolved: boolean | null
+          create_time: string
           profile_id: string | null
           tooltip_id: string | null
         }
@@ -15,6 +16,7 @@ export interface Database {
           comment_content?: string | null
           comment_id?: string
           comment_resolved?: boolean | null
+          create_time?: string
           profile_id?: string | null
           tooltip_id?: string | null
         }
@@ -22,6 +24,7 @@ export interface Database {
           comment_content?: string | null
           comment_id?: string
           comment_resolved?: boolean | null
+          create_time?: string
           profile_id?: string | null
           tooltip_id?: string | null
         }

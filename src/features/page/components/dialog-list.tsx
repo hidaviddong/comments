@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { LoaderIcon, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -45,12 +46,12 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
             <div
               key={comment.comment_id}
               className="flex w-full items-center justify-start space-x-2 rounded-lg border p-2 ">
-              <Avatar className="bg-red-300">
+              <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <div className="flex h-full w-full flex-col justify-center ">
-                <span className="text-xs text-slate-300">19.22PM</span>
+              <div className="mt-4 flex h-full w-full flex-col justify-center">
+                <span className="text-xs text-slate-300">{dayjs(comment.create_time).format('YYYY-MM-DD HH:mm')}</span>
                 <p className="text-sm"> {comment.comment_content}</p>
               </div>
             </div>
