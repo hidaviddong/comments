@@ -33,14 +33,12 @@ type ProjectFormSchemaType = z.infer<typeof ProjectFormSchema>
 
 export function IconamoonCommentAdd(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
+    <svg {...props} width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M12 21a9 9 0 1 0-9-9c0 1.488.36 2.891 1 4.127L3 21l4.873-1c1.236.64 2.64 1 4.127 1Zm0-11.999v6m-3-3h6"></path>
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M5.5 2V0H7V2H5.5ZM0.96967 2.03033L2.46967 3.53033L3.53033 2.46967L2.03033 0.96967L0.96967 2.03033ZM4.24592 4.24592L4.79515 5.75631L7.79516 14.0063L8.46663 15.8529L9.19636 14.0285L10.2739 11.3346L13.4697 14.5303L14.5303 13.4697L11.3346 10.2739L14.0285 9.19636L15.8529 8.46663L14.0063 7.79516L5.75631 4.79516L4.24592 4.24592ZM11.6471 8.53337L10.1194 9.14447C9.6747 9.32235 9.32235 9.6747 9.14447 10.1194L8.53337 11.6471L6.75408 6.75408L11.6471 8.53337ZM0 7H2V5.5H0V7Z"
+        fill="currentColor"></path>
     </svg>
   )
 }
@@ -177,7 +175,9 @@ function ToolFooter() {
   return (
     <>
       <IconamoonCommentAdd
-        className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
+        className={`h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-blue-500 ${
+          isOpen ? 'rounded-lg border-2 border-dashed border-white bg-blue-500 ' : ''
+        }`}
         onClick={() => {
           if (isOpen) {
             queryClient.invalidateQueries({
@@ -263,7 +263,7 @@ function ToolFooter() {
 export default function Footer() {
   const session = useAtomValue(sessionAtom)
   return (
-    <div className="fixed bottom-1 left-1/2 flex h-12 w-80 -translate-x-1/2 transform items-center justify-around rounded-full border bg-black shadow-lg">
+    <div className="fixed bottom-4 left-1/2 flex h-12 w-72 -translate-x-1/2 transform items-center justify-around rounded-3xl border bg-zinc-900 shadow-lg shadow-black/40">
       <div className="flex h-full cursor-pointer items-center justify-center space-x-2 text-sm">
         {session ? <ToolFooter /> : <SignFooter />}
       </div>

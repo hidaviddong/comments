@@ -18,7 +18,6 @@ import { TooltipsProps } from '@/types'
 import { useAuth } from '../hooks'
 import { DialogList } from './dialog-list'
 type Checked = DropdownMenuCheckboxItemProps['checked']
-
 const CommentFormSchema = z.object({
   comment_content: z
     .string()
@@ -106,27 +105,29 @@ function TooltipCard({ x, y, tooltip_id }: TooltipsProps) {
     <div
       className="absolute h-52 w-72 space-y-2 rounded-md border bg-white p-2 shadow"
       style={{ left: `${x}px`, top: `${y! + 20}px` }}>
-      <DialogList tooltip_id={tooltip_id} />
-      <div className="mt-1 flex w-full max-w-sm items-center justify-center space-x-2">
-        <Form {...commentForm}>
-          <form onSubmit={commentForm.handleSubmit(handleSendClick)} className="flex w-56 justify-around space-x-2">
-            <FormField
-              control={commentForm.control}
-              name="comment_content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-12">
-              <Send />
-            </Button>
-          </form>
-        </Form>
+      <div className="flex h-full w-full flex-col space-y-1">
+        <DialogList tooltip_id={tooltip_id} />
+        <footer className="mt-1 flex w-full items-center justify-start">
+          <Form {...commentForm}>
+            <form onSubmit={commentForm.handleSubmit(handleSendClick)} className="flex w-full justify-around space-x-2">
+              <FormField
+                control={commentForm.control}
+                name="comment_content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} className="w-56" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="mr-4 w-12">
+                <Send />
+              </Button>
+            </form>
+          </Form>
+        </footer>
       </div>
     </div>
   )

@@ -35,11 +35,21 @@ export function useHighLightCover() {
         })
         const tooltipX = rect.left + rect.width / 2 - 10
         const tooltipY = rect.top + rect.height / 2 - 10
-        const isOverlapping = serverTooltips?.some((tooltip) => {
-          if (tooltip.x && tooltip.y) {
-            Math.abs(tooltip.x! - tooltipX) <= 10 && Math.abs(tooltip.y! - tooltipY) <= 10
+        let isOverlapping = false // 初始假设没有重叠
+
+        serverTooltips?.forEach((tooltip) => {
+          // 确保tooltip有有效的x和y值
+          if (tooltip.x != null && tooltip.y != null) {
+            const distanceX = Math.abs(tooltip.x - tooltipX)
+            const distanceY = Math.abs(tooltip.y - tooltipY)
+
+            // 如果X或Y轴上的距离小于或等于10，则认为它们重叠
+            if (distanceX <= 10 && distanceY <= 10) {
+              isOverlapping = true
+            }
           }
         })
+
         if (!isOverlapping) {
           setTooltip({
             x: tooltipX,
