@@ -1,15 +1,16 @@
-# My-FrontEnd-StartUp
+# Comments
 
-## Stack
-
-+ 🚀 Framework: React + React Router + TypeScript
-+ 🛠️ Build Tool: Vite
-+ 🧬 State Management: Jotai
-+ 🌐 Data Fetching: React Query + Axios
-+ 🎨 CSS Framework: TailwindCSS + shadcn/ui
-+ 🐳 Containerization: Docker
+Add commenting to your website. 100% open source and easy to setup.
 
 ## How to use
-+ Replace `my_app` in Docker
-+ Replace project name in package.json
-+ `pnpm install` and `pnpm run dev`
+
+Document TODO
+
+## Roadmap
+- [] Support realtime database
+- [] Optimization of Package File Size
+- [] UI/UX Optimization
+- [] Nested Reply Functionality
+- [] Add more functions in toolbar
+- [] Support AI Comments
+
