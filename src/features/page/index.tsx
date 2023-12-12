@@ -22,7 +22,7 @@ export default function Page() {
           <Tooltip x={tooltip.x} y={tooltip.y} tooltip_id={tooltip.tooltip_id} key={tooltip.tooltip_id} />
         ))}
       {/* client tooltip */}
-      {isOpen && <ClientTooltip x={clientTooltip.x} y={clientTooltip.y} />}
+      {clientTooltip.x && clientTooltip.y && isOpen && <ClientTooltip x={clientTooltip.x} y={clientTooltip.y} />}
     </>
   )
 }
