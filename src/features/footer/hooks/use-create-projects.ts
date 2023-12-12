@@ -43,13 +43,13 @@ function useCreateProfileProject() {
           title: 'Create Project Fail! Please try again!'
         })
       }
+      refetchProjectData()
       return data
     },
     onSuccess() {
       toast({
         title: 'Craete Project Success!'
       })
-      refetchProjectData()
     }
   })
 }
