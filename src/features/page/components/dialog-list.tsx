@@ -29,33 +29,31 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
     <ScrollArea className="w-full flex-1 overflow-auto ">
       <div className="space-y-2">
         {comments?.map((comment) => (
-          <>
-            <div
-              key={comment.comment_id}
-              className="flex w-full items-center justify-start space-x-2 rounded-lg border p-2 ">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Avatar>
-                      <AvatarImage
-                        src={comment.profiles.profile_info.avatar_url}
-                        alt={comment.profiles.profile_info.full_name}
-                      />
-                      <AvatarFallback>{comment.profiles?.profile_info.full_name[0]}</AvatarFallback>
-                    </Avatar>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{comment.profiles.profile_info.full_name}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+          <div
+            key={comment.comment_id}
+            className="flex w-full items-center justify-start space-x-2 rounded-lg border p-2 ">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Avatar>
+                    <AvatarImage
+                      src={comment.profiles.profile_info.avatar_url}
+                      alt={comment.profiles.profile_info.full_name}
+                    />
+                    <AvatarFallback>{comment.profiles?.profile_info.full_name[0]}</AvatarFallback>
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{comment.profiles.profile_info.full_name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-              <div className="flex h-full w-full flex-col justify-center">
-                <span className="text-xs text-slate-300">{dayjs(comment.create_time).format('YYYY-MM-DD HH:mm')}</span>
-                <p className="text-sm"> {comment.comment_content}</p>
-              </div>
+            <div className="flex h-full w-full flex-col justify-center">
+              <span className="text-xs text-slate-300">{dayjs(comment.create_time).format('YYYY-MM-DD HH:mm')}</span>
+              <p className="text-sm"> {comment.comment_content}</p>
             </div>
-          </>
+          </div>
         ))}
         <Separator />
         <Button size="sm" variant="outline" className="w-full" onClick={() => setShowDeleteBar(true)}>
