@@ -18,13 +18,11 @@ export function useOAuthSign() {
           title: 'Oops, Sign Error, Please try again later!'
         })
       }
-      return data
-    },
-    onSuccess() {
       toast({
         variant: 'default',
-        title: 'Sign Success!'
+        title: 'Sign Success! Redirect to the home page...'
       })
+      return data
     }
   })
 }

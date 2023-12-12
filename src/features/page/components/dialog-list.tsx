@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { LoaderIcon, Trash2 } from 'lucide-react'
 import { useState } from 'react'
@@ -8,14 +7,13 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { supabase } from '@/supabaseClient'
 
-import { useCommentsQuery } from '../hooks'
+import { useCommentsQuery, useTooltipDelete } from '../hooks'
 
 export function DialogList({ tooltip_id }: { tooltip_id: string }) {
-  const queryClient = useQueryClient()
   const { data: comments, isLoading, isError, error } = useCommentsQuery(tooltip_id)
   const [showDeleteBar, setShowDeleteBar] = useState(false)
+  const { mutate: deleteTooltip } = useTooltipDelete()
   if (isLoading) {
     return (
       <div className="flex w-full flex-1 items-center justify-center">
@@ -26,18 +24,6 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
 
   if (isError) {
     return <div className="flex w-full flex-1 items-center justify-center">Error: {error.message}</div>
-  }
-  async function handleTooltipDelete() {
-    const { data, error } = await supabase.from('tooltips').delete().eq('tooltip_id', tooltip_id).select()
-    console.log(data)
-    if (data) {
-      queryClient.invalidateQueries({
-        queryKey: ['tooltips']
-      })
-    }
-    if (error) {
-      console.error(error)
-    }
   }
   return (
     <ScrollArea className="w-full flex-1 overflow-auto ">
@@ -51,12 +37,15 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
                 <Tooltip>
                   <TooltipTrigger>
                     <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                      <AvatarFallback>CN</AvatarFallback>
+                      <AvatarImage
+                        src={comment.profiles.profile_info.avatar_url}
+                        alt={comment.profiles.profile_info.full_name}
+                      />
+                      <AvatarFallback>{comment.profiles?.profile_info.full_name[0]}</AvatarFallback>
                     </Avatar>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>名字</p>
+                    <p>{comment.profiles.profile_info.full_name}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -77,7 +66,12 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
             <Button size="sm" onClick={() => setShowDeleteBar(false)}>
               Cancle
             </Button>
-            <Button size="sm" variant="destructive" onClick={handleTooltipDelete}>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => {
+                deleteTooltip(tooltip_id)
+              }}>
               Delete
             </Button>
           </div>
