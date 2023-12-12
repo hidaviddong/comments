@@ -9,7 +9,7 @@ import { checkTooltipExist, useTooltipCreate } from '../hooks'
 
 export default function ClientTooltip({ x, y }: { x: number; y: number }) {
   const currentProject = useAtomValue(currentProjectAtom)
-  const { mutate: tooltipCreate, isPending, isIdle } = useTooltipCreate()
+  const { mutate: tooltipCreate, isPending } = useTooltipCreate()
   if (x === 0 && y === 0) {
     return <></>
   }
@@ -28,12 +28,8 @@ export default function ClientTooltip({ x, y }: { x: number; y: number }) {
   }
 
   return (
-    <>
-      {isIdle && (
-        <Button variant="outline" size="icon" className="absolute h-6 w-6" style={{ left: `${x}px`, top: `${y}px` }}>
-          <PlusIcon className="h-4 w-4" onClick={handlePlusIconClick} />
-        </Button>
-      )}
-    </>
+    <Button variant="outline" size="icon" className="absolute h-6 w-6" style={{ left: `${x}px`, top: `${y}px` }}>
+      <PlusIcon className="h-4 w-4" onClick={handlePlusIconClick} />
+    </Button>
   )
 }

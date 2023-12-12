@@ -1,11 +1,9 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { toast } from '@/components/ui/use-toast'
 import { tooltipAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
-
-import { useTooltipsQuery } from '.'
 
 export async function checkTooltipExist({ x, y, project_id }: { x: number; y: number; project_id: string }) {
   if (project_id === '') {
@@ -13,7 +11,7 @@ export async function checkTooltipExist({ x, y, project_id }: { x: number; y: nu
       variant: 'destructive',
       title: `You haven't selected your Project yet! Please click on the avatar to choose.`
     })
-    return
+    return true
   }
 
   const { data, error } = await supabase.from('tooltips').select('*').eq('x', x).eq('y', y).eq('project_id', project_id)
@@ -32,7 +30,7 @@ export async function checkTooltipExist({ x, y, project_id }: { x: number; y: nu
 }
 export function useTooltipCreate() {
   const setTooltip = useSetAtom(tooltipAtom)
-  const { refetch } = useTooltipsQuery()
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: async ({ x, y, project_id }: { x: number; y: number; project_id: string }) => {
       const { data, error } = await supabase
@@ -49,7 +47,7 @@ export function useTooltipCreate() {
           title: 'Create tooltip fail! Please try again'
         })
       }
-      refetch()
+      queryClient.invalidateQueries({ queryKey: ['tooltips', project_id] })
       setTooltip({
         project_id: '',
         tooltip_id: '',
