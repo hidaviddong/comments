@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Session } from '@supabase/supabase-js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
-import { FolderOpenDot } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -17,6 +15,7 @@ import { IconamoonCommentAdd, MaterialSymbolsLogout } from '@/components/ui/icon
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { useToast } from '@/components/ui/use-toast'
+import { useAuth } from '@/features/page/hooks'
 import { currentProjectAtom, isOpenAtom } from '@/store'
 import { supabase } from '@/supabaseClient'
 
@@ -31,7 +30,8 @@ const ProjectFormSchema = z.object({
 
 type ProjectFormSchemaType = z.infer<typeof ProjectFormSchema>
 
-export default function ToolFooter({ session }: { session: Session | null }) {
+export default function ToolFooter() {
+  const session = useAuth
   const [isUserOpen, setIsUserOpen] = useState(false)
   const [showCreateProject, setShowCreateProject] = useState(false)
   const [isOpen, setIsOpen] = useAtom(isOpenAtom)
@@ -93,7 +93,7 @@ export default function ToolFooter({ session }: { session: Session | null }) {
         const newProjectId = newProjectData[0].project_id
         const { error } = await supabase.from('project_profiles').insert({
           project_id: newProjectId,
-          profile_id: session!.user.id
+          profile_id: session?.user.id
         })
         if (error) {
           toast({
@@ -114,6 +114,12 @@ export default function ToolFooter({ session }: { session: Session | null }) {
 
   return (
     <>
+      {profileData && (
+        <Avatar className="h-8 w-8" onClick={() => setIsUserOpen(!isUserOpen)}>
+          {/* @ts-ignore */}
+          <AvatarImage src={profileData[0].profile_info.avatar_url} alt={profileData[0].profile_info.full_name} />
+        </Avatar>
+      )}
       <IconamoonCommentAdd
         className={`h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-blue-500 ${
           isOpen ? 'rounded-lg bg-blue-500 ' : ''
@@ -127,16 +133,6 @@ export default function ToolFooter({ session }: { session: Session | null }) {
           setIsOpen(!isOpen)
         }}
       />
-      {profileData && (
-        <Avatar className="h-8 w-8">
-          {/*  */}
-          {/* @ts-ignore */}
-          <AvatarImage src={profileData[0].profile_info.avatar_url} alt={profileData[0].profile_info.full_name} />
-        </Avatar>
-      )}
-      <FolderOpenDot
-        onClick={() => setIsUserOpen(!isUserOpen)}
-        className="flex h-8 w-8 items-center justify-center p-1 text-center text-white hover:rounded-lg hover:bg-gray-600"></FolderOpenDot>
       <MaterialSymbolsLogout
         className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
         onClick={handleLogoutClick}
@@ -144,7 +140,8 @@ export default function ToolFooter({ session }: { session: Session | null }) {
       {isUserOpen && projectsData && (
         <Card className="absolute bottom-14  w-[300px] shadow-lg">
           <CardHeader>
-            <CardTitle>Projects</CardTitle>
+            {/* @ts-ignore */}
+            <CardTitle>Hi, {profileData[0].profile_info.full_name}!</CardTitle>
             <CardDescription>Select or Create your new project.</CardDescription>
           </CardHeader>
           <CardContent>
