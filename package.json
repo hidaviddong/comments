@@ -46,6 +46,7 @@
     "react-hook-form": "^7.48.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "type-fest": "^4.8.3",
     "vite-plugin-css-injected-by-js": "^3.3.0",
     "zod": "^3.22.4"
   },

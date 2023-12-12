@@ -9,19 +9,21 @@ export function useOAuthSign() {
   const { toast } = useToast()
   return useMutation({
     mutationFn: async (platform: Platform) => {
-      const { data } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: platform
       })
+      if (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Oops, Sign Error, Please try again later!'
+        })
+      }
       return data
     },
-
-    onSuccess(data, variables, context) {
-      console.log(data, variables, context)
-    },
-    onError() {
+    onSuccess() {
       toast({
-        variant: 'destructive',
-        title: 'Oops, Sign Error, Please try again later!'
+        variant: 'default',
+        title: 'Sign Success!'
       })
     }
   })
