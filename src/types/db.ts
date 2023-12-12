@@ -41,15 +41,15 @@ export interface Database {
       profiles: {
         Row: {
           profile_id: string
-          profile_name: string | null
+          profile_info: Json | null
         }
         Insert: {
           profile_id: string
-          profile_name?: string | null
+          profile_info?: Json | null
         }
         Update: {
           profile_id?: string
-          profile_name?: string | null
+          profile_info?: Json | null
         }
         Relationships: [
           {

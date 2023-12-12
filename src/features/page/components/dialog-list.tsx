@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { supabase } from '@/supabaseClient'
 
 import { useCommentsQuery } from '../hooks'
@@ -46,10 +47,20 @@ export function DialogList({ tooltip_id }: { tooltip_id: string }) {
             <div
               key={comment.comment_id}
               className="flex w-full items-center justify-start space-x-2 rounded-lg border p-2 ">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>名字</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               <div className="flex h-full w-full flex-col justify-center">
                 <span className="text-xs text-slate-300">{dayjs(comment.create_time).format('YYYY-MM-DD HH:mm')}</span>
                 <p className="text-sm"> {comment.comment_content}</p>
