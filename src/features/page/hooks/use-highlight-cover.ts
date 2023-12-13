@@ -43,8 +43,8 @@ export function useHighLightCover() {
             const distanceX = Math.abs(tooltip.x - tooltipX)
             const distanceY = Math.abs(tooltip.y - tooltipY)
 
-            // 如果X或Y轴上的距离小于或等于10，则认为它们重叠
-            if (distanceX <= 10 && distanceY <= 10) {
+            // 如果X或Y轴上的距离小于或等于20，则认为它们重叠
+            if (distanceX <= 20 && distanceY <= 20) {
               isOverlapping = true
             }
           }
