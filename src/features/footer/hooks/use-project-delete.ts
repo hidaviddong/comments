@@ -3,10 +3,10 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from '@/components/ui/use-toast'
 import { supabase } from '@/supabaseClient'
 
-import { useProjectProfilesQuery } from '.'
+import { useProjectQuery } from '.'
 
 export function useDeleteProject() {
-  const { refetch: refetchProjectData } = useProjectProfilesQuery()
+  const { refetch: refetchProjectData } = useProjectQuery()
   return useMutation({
     mutationFn: async (project_id: string) => {
       const { data, error } = await supabase.from('projects').delete().eq('project_id', project_id)
