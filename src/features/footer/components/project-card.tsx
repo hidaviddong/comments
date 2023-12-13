@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { currentProjectAtom } from '@/store'
 
-import { checkProjectExist, useCreateProject, useDeleteProject, useProjectProfilesQuery } from '../hooks'
+import { checkProjectExist, useCreateProject, useDeleteProject, useProjectQuery } from '../hooks'
 const ProjectFormSchema = z.object({
   project_name: z
     .string()
@@ -23,7 +23,7 @@ interface ProjectCardProps {
 }
 export default function ProjectCard({ full_name }: ProjectCardProps) {
   const [currentProject, setCurrentProject] = useAtom(currentProjectAtom)
-  const { data: projectsData } = useProjectProfilesQuery()
+  const { data: projectsData } = useProjectQuery()
   const { mutate: createProjectMutate } = useCreateProject()
   const { mutate: deleteProjectMutate } = useDeleteProject()
   const projectForm = useForm<ProjectFormSchemaType>({

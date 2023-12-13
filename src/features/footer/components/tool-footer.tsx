@@ -6,14 +6,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { IconamoonCommentAdd, MaterialSymbolsLogout } from '@/components/ui/icons'
 import { isOpenAtom } from '@/store'
 
-import { useProfilesQuery, useProjectProfilesQuery, useSignOut } from '../hooks'
+import { useProfilesQuery, useProjectQuery, useSignOut } from '../hooks'
 import ProjectCard from './project-card'
 
 export default function ToolFooter() {
   const [isUserOpen, setIsUserOpen] = useState(false)
   const [isCommentOpen, setIsCommentOpen] = useAtom(isOpenAtom)
   const queryClient = useQueryClient()
-  const { data: projectsData } = useProjectProfilesQuery()
+  const { data: projectsData } = useProjectQuery()
   const { data: profileData } = useProfilesQuery()
   const { mutate: signOutMutate } = useSignOut()
   return (
@@ -40,6 +40,8 @@ export default function ToolFooter() {
             className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600"
             onClick={() => {
               signOutMutate()
+              setIsCommentOpen(false)
+              setIsUserOpen(false)
             }}
           />
           {isUserOpen && projectsData && <ProjectCard full_name={profileData[0].profile_info.full_name} />}
