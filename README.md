@@ -1,7 +1,10 @@
-<p align="center"><a href="https://comment.daviddong.me" target="_blank" rel="noopener noreferrer"><img width="100" src="/favicon.png" alt="logo"></a></p>
+<div align="center">
 
 <a href="https://comment.daviddong.me">
-  <img alt=" Add comments to your website. 100% open source and easy to setup." src="https://github.com/DongHY1/comments/assets/73568310/e7024ff2-26da-44fb-8aac-2a2db5a23ca4">
+  <img alt=" Add comments to your website. 100% open source and easy to setup." width="300" height="300" src="https://github.com/DongHY1/comments/assets/73568310/0712dc1a-88f7-4a24-a22e-aeb687392211">
+<a/>
+  
+</div>
 <h1 align="center">
   Comments
 </h1>
@@ -36,3 +39,4 @@ Comments is built on the following stack:
 - [shadcn/ui](https://ui.shadcn.com/) – styles
 - [Supabase](https://supabase.com/) - backend
 - [Cloudflare](https://cloudflare.com/) – deployments
+- [ChatGPT](https://chat.openai.com/) - design
