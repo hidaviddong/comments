@@ -1,3 +1,5 @@
+<p align="center"><a href="https://comment.daviddong.me" target="_blank" rel="noopener noreferrer"><img width="100" src="/favicon.png" alt="logo"></a></p>
+
 <a href="https://comment.daviddong.me">
   <img alt=" Add comments to your website. 100% open source and easy to setup." src="https://github.com/DongHY1/comments/assets/73568310/e7024ff2-26da-44fb-8aac-2a2db5a23ca4">
 <h1 align="center">
