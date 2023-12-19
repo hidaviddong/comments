@@ -8,6 +8,7 @@ import { isOpenAtom } from '@/store'
 
 import { useProfilesQuery, useProjectQuery, useSignOut } from '../hooks'
 import ProjectCard from './project-card'
+import SignFooter from './sign-footer'
 
 export default function ToolFooter() {
   const [isUserOpen, setIsUserOpen] = useState(false)
@@ -18,12 +19,18 @@ export default function ToolFooter() {
   const { mutate: signOutMutate } = useSignOut()
   return (
     <>
-      {profileData && (
+      {profileData && profileData.length > 0 && (
         <>
-          <Avatar className="h-8 w-8" onClick={() => setIsUserOpen(!isUserOpen)}>
-            <AvatarImage src={profileData[0].profile_info.avatar_url} alt={profileData[0].profile_info.full_name} />
-            <AvatarFallback>{profileData[0].profile_info.full_name[0]}</AvatarFallback>
-          </Avatar>
+          {profileData[0].profile_info ? (
+            <Avatar className="h-8 w-8" onClick={() => setIsUserOpen(!isUserOpen)}>
+              <AvatarImage src={profileData[0].profile_info.avatar_url} alt={profileData[0].profile_info.full_name} />
+              <AvatarFallback>{profileData[0].profile_info.full_name[0]}</AvatarFallback>
+            </Avatar>
+          ) : (
+            <div className="h-8 w-8">
+              <SignFooter />
+            </div>
+          )}
 
           <IconamoonCommentAdd
             className={`h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600 ${
