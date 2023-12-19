@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import { useState } from 'react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { IconamoonCommentAdd, MaterialSymbolsLogout } from '@/components/ui/icons'
+import { CarbonUserAvatarFilledAlt, IconamoonCommentAdd, MaterialSymbolsLogout } from '@/components/ui/icons'
 import { isOpenAtom } from '@/store'
 
 import { useProfilesQuery, useProjectQuery, useSignOut } from '../hooks'
@@ -19,17 +19,17 @@ export default function ToolFooter() {
   const { mutate: signOutMutate } = useSignOut()
   return (
     <>
-      {profileData && profileData.length > 0 && (
+      {profileData && profileData.length > 0 ? (
         <>
-          {profileData[0].profile_info ? (
-            <Avatar className="h-8 w-8" onClick={() => setIsUserOpen(!isUserOpen)}>
+          {profileData[0].profile_info &&
+          profileData[0].profile_info.avatar_url &&
+          profileData[0].profile_info.full_name ? (
+            <Avatar className="h-10 w-10" onClick={() => setIsUserOpen(!isUserOpen)}>
               <AvatarImage src={profileData[0].profile_info.avatar_url} alt={profileData[0].profile_info.full_name} />
               <AvatarFallback>{profileData[0].profile_info.full_name[0]}</AvatarFallback>
             </Avatar>
           ) : (
-            <div className="h-8 w-8">
-              <SignFooter />
-            </div>
+            <CarbonUserAvatarFilledAlt className="h-8 w-8 p-1 text-2xl text-white hover:rounded-lg hover:bg-gray-600" />
           )}
 
           <IconamoonCommentAdd
@@ -53,6 +53,8 @@ export default function ToolFooter() {
           />
           {isUserOpen && projectsData && <ProjectCard full_name={profileData[0].profile_info.full_name} />}
         </>
+      ) : (
+        <SignFooter />
       )}
     </>
   )
