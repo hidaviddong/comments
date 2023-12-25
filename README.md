@@ -3,11 +3,15 @@
 <a href="https://comment.daviddong.me">
   <img alt=" Add comments to your website. 100% open source and easy to setup." width="300" height="300" src="https://github.com/DongHY1/comments/assets/73568310/0712dc1a-88f7-4a24-a22e-aeb687392211">
 <a/>
-  
 </div>
 <h1 align="center">
   Comments
 </h1>
+ <div align="center">
+  <a href="https://www.producthunt.com/posts/comments-2?utm_source=badge-featured&utm_medium=badge&utm_source=badge-comments-2" target="_blank">
+    <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=431308&theme=light" alt="Comments - add comments to your website | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
+  </a>
+</div>
   <p align="center">
   <a href="#introduction"><strong>Introduction</strong></a> ·
   <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
