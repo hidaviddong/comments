@@ -31,7 +31,7 @@ Add comments to your website. 100% open source and easy to setup.
 
 ## Deploy Your Own
 
-You can deploy your own Comments:
+You can deploy your own :
 [Docs](https://comment.daviddong.me)
 <br />
 
